@@ -16,15 +16,6 @@ const MainTabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="Profile"
-        component={NotImplementedScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="logo-whatsapp" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Contacts"
         component={ContactsScreen}
         options={{

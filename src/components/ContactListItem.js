@@ -6,21 +6,26 @@ const ContactListItem = ({ user }) => {
 
   return (
     <Pressable
-      onPress={() => { }}
-      style={styles.container}
+      onPress={() => navigation.navigate("Profile", { user: user})}
+      style={({ pressed }) => [
+        {
+          backgroundColor: pressed ? "lightgray" : "white",
+        }]}
     >
-      <Image source={{ uri: user.image }} style={styles.image} />
+      <View style={styles.container}>
+        <Image source={{ uri: user.image }} style={styles.image} />
 
-      <View style={styles.content}>
-        <Text style={styles.name} numberOfLines={1}>
-          {user.name}
-        </Text>
+        <View style={styles.content}>
+          <Text style={styles.name} numberOfLines={1}>
+            {user.name}
+          </Text>
 
-        <Text numberOfLines={1} style={styles.subTitle}>
-          {user.status == null ? "Hey there! I am using WhatsApp." : user.status}
-        </Text>
+          <Text numberOfLines={1} style={styles.subTitle}>
+            {user.status == null ? "Hey there! I am using WhatsApp." : user.status}
+          </Text>
 
-        <View style={styles.separator} />
+          <View style={styles.separator} />
+        </View>
       </View>
     </Pressable>
   );
@@ -37,6 +42,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+
   },
   image: {
     width: 45,
