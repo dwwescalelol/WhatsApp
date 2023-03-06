@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet } from "react-native";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 
 const InputBox = () => {
-	const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState('');
 
   const onSend = () => {
     console.warn("Send a new message: ", newMessage);
@@ -23,7 +23,6 @@ const InputBox = () => {
       <MaterialIcons onPress={onSend} style={styles.send} name='send' size={24} color="white" />
     </View>
   )
-
 }
 
 const styles = StyleSheet.create({

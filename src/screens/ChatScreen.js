@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ImageBackground, StyleSheet, FlatList, KeyboardAvoidingView } from "react-native";
+import { ImageBackground, StyleSheet, FlatList, KeyboardAvoidingView, Platform } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
 import Message from "../components/Message";
@@ -14,7 +14,10 @@ const ChatScreen = () => {
   const navigation = useNavigation();
   
   useEffect(() => {
-    navigation.setOptions({ title: route.params.name });
+    navigation.setOptions({ 
+      title: route.params.name,
+      
+     });
   }, [route.params]);
   
   return (
@@ -29,23 +32,19 @@ const ChatScreen = () => {
           style={styles.list}
           inverted
         />
-
         <InputBox />
       </ImageBackground>
     </KeyboardAvoidingView>
   );
 };
 
-
 const styles = StyleSheet.create({
   bg: {
     flex: 1,
-
   },
   list: {
     padding: 10,
   }
-
 });
 
 

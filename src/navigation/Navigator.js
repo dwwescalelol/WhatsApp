@@ -7,7 +7,6 @@ import MainTabNavigator from "./MainTabNavigator";
 
 const Stack = createNativeStackNavigator();
 
-
 const Navigator = () => {
   return (
     <NavigationContainer>
@@ -15,9 +14,17 @@ const Navigator = () => {
         <Stack.Screen
           name="Main"
           component={MainTabNavigator}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+          }}
         />
-        <Stack.Screen name="Chat" component={ChatScreen} />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={{
+            headerBackTitle: 'Custom Back Text', // set custom text for back button
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
