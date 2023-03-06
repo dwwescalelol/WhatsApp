@@ -12,23 +12,23 @@ import messages from "../../assets/data/messages.json"
 const ChatScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  
+
   useEffect(() => {
-    navigation.setOptions({ 
+    navigation.setOptions({
       title: route.params.name,
-     });
+    });
   }, [route.params]);
-  
+
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 90}
-    style={styles.bg}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 90}
+      style={styles.bg}
     >
       <ImageBackground source={bg} style={styles.bg}>
-        <FlatList 
+        <FlatList
           data={messages}
-          renderItem={({ item }) => <Message message={item}/>}
+          renderItem={({ item }) => <Message message={item} />}
           style={styles.list}
           inverted
         />

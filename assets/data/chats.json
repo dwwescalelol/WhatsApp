@@ -3,6 +3,7 @@
     "id": "1",
     "user": {
       "id": "u2",
+      "status": ".",
       "name": "Lukas",
       "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/lukas.jpeg"
     },
