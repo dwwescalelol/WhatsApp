@@ -1,12 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
-import Navigator from "./src/navigation/Navigator";
+import LoginNavigator from "./src/navigation/LoginNavigator";
 
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Navigator/>
+      <LoginNavigator/>
 
       <StatusBar style="auto" />
     </View>
