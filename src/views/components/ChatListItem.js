@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
+import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -43,7 +44,7 @@ const ChatListItem = ({ chat }) => {
 };
 
 ChatListItem.propTypes = {
-  chat: PropTypes.string.isRequired,
+  chat: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

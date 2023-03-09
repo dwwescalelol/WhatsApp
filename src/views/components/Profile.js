@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 
 const Profile = ({ user }) => {
@@ -37,7 +38,7 @@ const Profile = ({ user }) => {
 };
 
 Profile.propTypes = {
-  user: PropTypes.string.isRequired,
+  user: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

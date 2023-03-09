@@ -1,12 +1,13 @@
 import React from 'react';
-import Profile from './components/Profile';
+import PropTypes from 'prop-types';
+import Profile from '../components/Profile';
 
 const ProfileScreen = ({ route }) => {
   return <Profile user={route.params.user} />;
 };
 
 ProfileScreen.propTypes = {
-  route: PropTypes.string.isRequired,
+  route: PropTypes.object,
 };
 
 export default ProfileScreen;

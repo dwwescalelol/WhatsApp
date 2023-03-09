@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -27,7 +28,7 @@ const Message = ({ message }) => {
 };
 
 Message.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

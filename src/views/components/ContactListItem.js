@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
 import { Text, Image, StyleSheet, Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -37,7 +38,7 @@ const ContactListItem = ({ user }) => {
 };
 
 ContactListItem.propTypes = {
-  user: PropTypes.string.isRequired,
+  user: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
