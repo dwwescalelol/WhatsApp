@@ -1,14 +1,11 @@
-import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import React from 'react';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 
 const Profile = ({ user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.body}>
-        <Image
-          source={{ uri: user.image }}
-          style={styles.avatar}
-        />
+        <Image source={{ uri: user.image }} style={styles.avatar} />
         <View style={styles.userInfo}>
           <Text style={styles.username}>{user.name}</Text>
           <Text style={styles.status}>Available</Text>
@@ -16,7 +13,9 @@ const Profile = ({ user }) => {
         <View style={styles.separator} />
         <View style={styles.infoContainer}>
           <Text style={styles.infoTitle}>Status</Text>
-          <Text style={styles.infoText}>{user.status == null ? "default status" : user.status}</Text>
+          <Text style={styles.infoText}>
+            {user.status == null ? 'default status' : user.status}
+          </Text>
         </View>
         <View style={styles.separator} />
         <View style={styles.infoContainer}>
@@ -37,13 +36,17 @@ const Profile = ({ user }) => {
   );
 };
 
+Profile.propTypes = {
+  user: PropTypes.string.isRequired,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
   },
   body: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   avatar: {
     width: 120,
@@ -52,34 +55,34 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   userInfo: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 16,
   },
   username: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   status: {
     fontSize: 18,
-    color: "lightgray",
+    color: 'lightgray',
   },
   separator: {
     height: 1,
-    width: "90%",
-    backgroundColor: "#c7c7c7",
+    width: '90%',
+    backgroundColor: '#c7c7c7',
     marginVertical: 16,
   },
   infoContainer: {
-    width: "90%",
+    width: '90%',
   },
   infoTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 8,
   },
   infoText: {
     fontSize: 18,
-    color: "#000000",
+    color: '#000000',
   },
 });
 

@@ -1,8 +1,9 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MainStackNavigator from "./MainStackNavigator";
-import SignUpScreen from "../views/screens/SignUpScreen";
-import LogInScreen from "../views/screens/LoginScreen";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MainStackNavigator from './MainStackNavigator';
+import SignUpScreen from '../views/screens/SignUpScreen';
+import LogInScreen from '../views/screens/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,6 @@ const LoginNavigator = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 export default LoginNavigator;

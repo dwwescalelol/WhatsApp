@@ -1,9 +1,12 @@
+import React from 'react';
 import { FlatList } from 'react-native';
 import chats from '../../../assets/data/chats.json';
 import ContactListItem from '../components/ContactListItem';
 
 const ContactsScreen = () => {
-  const sortedChats = chats.sort((a, b) => a.user.name.localeCompare(b.user.name));
+  const sortedChats = chats.sort((a, b) =>
+    a.user.name.localeCompare(b.user.name)
+  );
 
   return (
     <FlatList

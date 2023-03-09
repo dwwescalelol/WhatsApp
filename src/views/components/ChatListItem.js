@@ -1,8 +1,9 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 
 dayjs.extend(relativeTime);
 
@@ -11,17 +12,17 @@ const ChatListItem = ({ chat }) => {
 
   return (
     <Pressable
-      onPress={() => navigation.navigate("Chat", { id: chat.id, name: chat.user.name })}
+      onPress={() =>
+        navigation.navigate('Chat', { id: chat.id, name: chat.user.name })
+      }
       style={({ pressed }) => [
         {
-          backgroundColor: pressed ? "lightgray" : "white",
-        }]}
+          backgroundColor: pressed ? 'lightgray' : 'white',
+        },
+      ]}
     >
       <View style={styles.container}>
-        <Image
-          source={{ uri: chat.user.image }}
-          style={styles.image}
-        />
+        <Image source={{ uri: chat.user.image }} style={styles.image} />
 
         <View style={styles.content}>
           <View style={styles.row}>
@@ -32,10 +33,7 @@ const ChatListItem = ({ chat }) => {
               {dayjs(chat.lastMessage.createdAt).fromNow(true)}
             </Text>
           </View>
-          <Text
-            numberOfLines={2}
-            style={styles.subTitle}
-          >
+          <Text numberOfLines={2} style={styles.subTitle}>
             {chat.lastMessage.text}
           </Text>
         </View>
@@ -44,10 +42,14 @@ const ChatListItem = ({ chat }) => {
   );
 };
 
+ChatListItem.propTypes = {
+  chat: PropTypes.string.isRequired,
+};
+
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "stretch",
+    flexDirection: 'row',
+    alignItems: 'stretch',
     marginHorizontal: 10,
     marginVertical: 5,
     height: 70,
@@ -61,19 +63,19 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    borderBottomColor: "lightgray",
+    borderBottomColor: 'lightgray',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   row: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 5,
   },
   name: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     flex: 1,
   },
   subTitle: {
-    color: "grey",
+    color: 'grey',
   },
 });
 

@@ -1,12 +1,12 @@
-import Profile from "../components/Profile";
+import React from 'react';
+import Profile from './components/Profile';
 
-/// TODO make profile the user 
 const ProfileScreen = ({ route }) => {
-  const user = route.params;
+  return <Profile user={route.params.user} />;
+};
 
-  return (
-    <Profile user={user.user}/>
-  );
+ProfileScreen.propTypes = {
+  route: PropTypes.string.isRequired,
 };
 
 export default ProfileScreen;

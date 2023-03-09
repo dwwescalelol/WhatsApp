@@ -1,9 +1,10 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import NotImplementedScreen from "../views/screens/NotImplementedScreen";
-import ChatsScreen from "../views/screens/ChatsScreen";
-import { Ionicons, Entypo } from "@expo/vector-icons"
-import ContactsScreen from "../views/screens/ContactsScreen";
-import SettingScreen from "../views/screens/SettingsScreen";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import NotImplementedScreen from '../views/screens/NotImplementedScreen';
+import ChatsScreen from '../views/screens/ChatsScreen';
+import { Ionicons, Entypo } from '@expo/vector-icons';
+import ContactsScreen from '../views/screens/ContactsScreen';
+import SettingScreen from '../views/screens/SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,8 +13,8 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName="Contacts"
       screenOptions={{
-        tabBarStyle: { backgroundColor: "whitesmoke" },
-        headerStyle: { backgroundColor: "whitesmoke" },
+        tabBarStyle: { backgroundColor: 'whitesmoke' },
+        headerStyle: { backgroundColor: 'whitesmoke' },
       }}
     >
       <Tab.Screen
@@ -45,7 +46,7 @@ const MainTabNavigator = () => {
             <Entypo
               name="new-message"
               size={18}
-              color={"royalblue"}
+              color={'royalblue'}
               style={{ marginRight: 15 }}
             />
           ),

@@ -1,9 +1,13 @@
-import { FlatList } from "react-native";
-import chats from '../../../assets/data/chats.json'
-import ChatListItem from "../components/ChatListItem";
+import React from 'react';
+
+import { FlatList } from 'react-native';
+import chats from '../../../assets/data/chats.json';
+import ChatListItem from '../components/ChatListItem';
 
 const ChatsScreen = () => {
-  const sortedChats = chats.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt));
+  const sortedChats = chats.sort((a, b) =>
+    a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)
+  );
 
   return (
     <FlatList

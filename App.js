@@ -1,12 +1,13 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
-import LoginNavigator from "./src/navigation/LoginNavigator";
+import React from 'react';
 
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, View } from 'react-native';
+import LoginNavigator from './src/navigation/LoginNavigator';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <LoginNavigator/>
+      <LoginNavigator />
 
       <StatusBar style="auto" />
     </View>
@@ -16,7 +17,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "whitesmoke",
-    justifyContent: "center",
+    backgroundColor: 'whitesmoke',
+    justifyContent: 'center',
   },
 });

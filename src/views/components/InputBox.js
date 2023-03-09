@@ -1,57 +1,65 @@
+import React from 'react';
+
 import { useState } from 'react';
-import { View, TextInput, StyleSheet } from "react-native";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons"
+import { View, TextInput, StyleSheet } from 'react-native';
+import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const InputBox = () => {
   const [newMessage, setNewMessage] = useState('');
 
   const onSend = () => {
-    console.warn("Send a new message: ", newMessage);
+    console.warn('Send a new message: ', newMessage);
 
-    setNewMessage("");
+    setNewMessage('');
   };
 
   return (
-    <SafeAreaView edges={["bottom"]} style={styles.container}>
-      <AntDesign name='plus' size={24} color='royalblue' />
+    <SafeAreaView edges={['bottom']} style={styles.container}>
+      <AntDesign name="plus" size={24} color="royalblue" />
       <TextInput
         value={newMessage}
         onChangeText={setNewMessage}
-        placeholder={"Type a message"}
+        placeholder={'Type a message'}
         style={styles.input}
       />
-      <MaterialIcons onPress={onSend} style={styles.send} name='send' size={24} color="white" />
+      <MaterialIcons
+        onPress={onSend}
+        style={styles.send}
+        name="send"
+        size={24}
+        color="white"
+      />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    backgroundColor: "whitesmoke",
+    flexDirection: 'row',
+    backgroundColor: 'whitesmoke',
     padding: 5,
-    alignItems: "center",
+    alignItems: 'center',
   },
   input: {
     fontSize: 18,
 
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 5,
     paddingHorizontal: 10,
     marginHorizontal: 10,
 
     borderRadius: 50,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "lightgray",
+    borderColor: 'lightgray',
   },
   send: {
-    backgroundColor: "royalblue",
+    backgroundColor: 'royalblue',
     padding: 7,
     borderRadius: 15,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });
 
-export default InputBox
+export default InputBox;
