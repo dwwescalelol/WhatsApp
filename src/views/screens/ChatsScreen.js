@@ -5,7 +5,7 @@ import chats from '../../../assets/data/chats.json';
 import ChatListItem from '../components/ChatListItem';
 
 const ChatsScreen = () => {
-  const sortedChats = chats.sort((a, b) =>
+  const sortedChats = chats.sort((b, a) =>
     a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)
   );
 
@@ -13,7 +13,6 @@ const ChatsScreen = () => {
     <FlatList
       data={sortedChats}
       renderItem={({ item }) => <ChatListItem chat={item} />}
-      inverted
     />
   );
 };

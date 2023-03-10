@@ -1,57 +1,109 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const LogInScreen = () => {
-  const [username, setUsername] = useState('');
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const navigation = useNavigation();
 
-  const handleLogIn = () => {
-    // Perform sign-up logic here, such as making an API call to a server
-    // If sign-up is successful, navigate to the Chats screen
-    navigation.reset({
-      routes: [{ name: 'Nav' }],
-    });
+  const handleLogin = () => {
+    navigation.navigate('MainApp');
   };
 
   return (
     <View style={styles.container}>
-      <Text>Log In Screen</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Log In" onPress={handleLogIn} />
-      <Button title="Sign Up" onPress={navigation.navigate('SignUp')} />
+      <Ionicons name="logo-whatsapp" size={120} color={'#25D366'} />
+      <Text style={styles.heading}>WhatsApp</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Email Address</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="example@example.com"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Password</Text>
+        <TextInput
+          style={styles.input}
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
+      </View>
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginText}>LOG IN</Text>
+      </TouchableOpacity>
+      <Text>Dont have an account?</Text>
+      <TouchableOpacity
+        style={styles.signupButton}
+        onPress={() => navigation.navigate('SignUp')}
+      >
+        <Text style={styles.signupText}>SIGN UP</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default LogInScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  input: {
+  heading: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  inputContainer: {
     width: '80%',
-    height: 40,
-    marginVertical: 10,
-    padding: 10,
+    marginBottom: 10,
+  },
+  inputLabel: {
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 4,
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+  },
+  loginButton: {
+    backgroundColor: '#25D366',
+    padding: 10,
+    borderRadius: 5,
+    width: '80%',
+  },
+  loginText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  signupButton: {
+    padding: 5,
+    width: '80%',
+  },
+  signupText: {
+    color: '#25D366',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
+
+export default LoginScreen;

@@ -6,9 +6,7 @@ const SettingScreen = () => {
   const navigation = useNavigation();
 
   const handleLogout = () => {
-    navigation.reset({
-      routes: [{ name: 'SignUp' }],
-    });
+    navigation.navigate('LogIn');
   };
 
   return (

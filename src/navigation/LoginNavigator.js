@@ -11,13 +11,13 @@ const LoginNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="SignUp"
+        initialRouteName="LogIn"
         screenOptions={{
           headerShown: false,
         }}
       >
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="LogIn" component={LogInScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="MainApp" component={MainStackNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
