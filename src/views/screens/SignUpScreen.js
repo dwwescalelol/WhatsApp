@@ -4,11 +4,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import InputField from '../components/InputField';
 import emailValidator from 'email-validator';
-import fetch from 'node-fetch';
+import ApiWrapper from '../../api/ApiWrapper';
 
-// TODO: handel aria-label for text inputs
+// TODO: handel aria-label for text inputs, cahnge handelSignUp to do onblur of all fields, maybe change button red
 
 const SignUpScreen = () => {
+  const [apiResponce, setApiResponce] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,14 +18,38 @@ const SignUpScreen = () => {
 
   const navigation = useNavigation();
 
-  const handleSignUp = () => {
-    // navigation.navigate('MainApp');
+  const handleSignUp = async () => {
+    if (isSignUpValid()) {
+      setApiResponce('Make sure all fields are valid.');
+      return;
+    }
+    const responce = await ApiWrapper.register(
+      firstName,
+      lastName,
+      email,
+      password
+    );
+    console.log(responce.status);
+    if (responce.status == 201) navigation.navigate('LogIn');
+    if (responce.status == 400) setApiResponce('Email is already registered.');
+    if (responce.status == 500)
+      setApiResponce('What the fuck happend here then.');
+  };
+
+  const isSignUpValid = () => {
+    return (
+      validateName(firstName) ||
+      validateName(lastName) ||
+      validateEmail(email) ||
+      validatePassword(password) ||
+      validateConfirmPassword(password, confirmPassword)
+    );
   };
 
   const alphabetRegex = /^[a-zA-Z]+$/;
   const passwordRegex =
     /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-  // check legnth, check regex. Ed is a name
+
   const validateName = (name) => {
     if (name.length < 2) return 'Must be atleast 3 charecters';
     if (!alphabetRegex.test(name))
@@ -33,8 +58,7 @@ const SignUpScreen = () => {
   };
 
   const validateEmail = (email) => {
-    if (!emailValidator.validate(email))
-      return 'Not a valid email, please try again cunt';
+    if (!emailValidator.validate(email)) return 'Not a valid email';
     return null;
   };
 
@@ -88,10 +112,17 @@ const SignUpScreen = () => {
         errorMessage={validateConfirmPassword(password, confirmPassword)}
         placeholder="Current Password"
       />
+
       <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
         <Text style={styles.loginText}>SIGN UP</Text>
       </TouchableOpacity>
-      <Text>Already have an account?</Text>
+
+      {apiResponce ? (
+        <Text style={styles.responceText}>{apiResponce}</Text>
+      ) : (
+        <Text>Already have an account?</Text>
+      )}
+
       <TouchableOpacity
         style={styles.signupButton}
         onPress={() => navigation.navigate('LogIn')}
@@ -135,6 +166,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  responceText: {
+    color: 'red',
   },
 });
 
