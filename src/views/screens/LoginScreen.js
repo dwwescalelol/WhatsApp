@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import InputField from '../components/InputField';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -23,24 +24,18 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <Ionicons name="logo-whatsapp" size={120} color={'#25D366'} />
       <Text style={styles.heading}>WhatsApp</Text>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Email Address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example@example.com"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
+      {/* Email */}
+      <InputField
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email Adress"
+      />
+      {/* Password */}
+      <InputField
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Password"
+      />
       <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.loginText}>LOG IN</Text>
       </TouchableOpacity>

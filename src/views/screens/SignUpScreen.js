@@ -1,73 +1,94 @@
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import InputField from '../components/InputField';
+import emailValidator from 'email-validator';
+import fetch from 'node-fetch';
+
+// TODO: handel aria-label for text inputs
 
 const SignUpScreen = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    navigation.navigate('MainApp');
+  const handleSignUp = () => {
+    // navigation.navigate('MainApp');
   };
 
+  const alphabetRegex = /^[a-zA-Z]+$/;
+  const passwordRegex =
+    /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+  // check legnth, check regex. Ed is a name
+  const validateName = (name) => {
+    if (name.length < 2) return 'Must be atleast 3 charecters';
+    if (!alphabetRegex.test(name))
+      return 'Name must consist of only alphabetical charecters';
+    return null;
+  };
+
+  const validateEmail = (email) => {
+    if (!emailValidator.validate(email))
+      return 'Not a valid email, please try again cunt';
+    return null;
+  };
+
+  const validatePassword = (password) => {
+    if (!passwordRegex.test(password)) return 'Password too week';
+    return null;
+  };
+
+  const validateConfirmPassword = (password, confirmPassword) => {
+    if (!(password === confirmPassword)) return 'Passwords are not the same';
+    return null;
+  };
   return (
     <View style={styles.container}>
       <Ionicons name="logo-whatsapp" size={120} color={'#25D366'} />
       <Text style={styles.heading}>WhatsApp</Text>
 
-      {/* First name*/}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>First Name</Text>
-        <TextInput
-          style={styles.input}
-          value={firstName}
-          onChangeText={setFirstName}
-        />
-      </View>
-
+      {/* First name, more than 2, only alpha*/}
+      <InputField
+        value={firstName}
+        onChangeText={setFirstName}
+        errorMessage={validateName(firstName)}
+        placeholder="First Name"
+      />
       {/* Last name*/}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Last Name</Text>
-        <TextInput
-          style={styles.input}
-          value={lastName}
-          onChangeText={setLastName}
-        />
-      </View>
-
+      <InputField
+        value={lastName}
+        onChangeText={setLastName}
+        errorMessage={validateName(lastName)}
+        placeholder="Last Name"
+      />
       {/* Email */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Email Address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example@example.com"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
-
+      <InputField
+        value={email}
+        onChangeText={setEmail}
+        errorMessage={validateEmail(email)}
+        placeholder="Email Adress"
+      />
       {/* Password */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+      <InputField
+        value={password}
+        onChangeText={setPassword}
+        errorMessage={validatePassword(password)}
+        placeholder="Password"
+      />
+      {/* Confirm Password */}
+      <InputField
+        label="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        errorMessage={validateConfirmPassword(password, confirmPassword)}
+        placeholder="Current Password"
+      />
+      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
         <Text style={styles.loginText}>SIGN UP</Text>
       </TouchableOpacity>
       <Text>Already have an account?</Text>
@@ -92,21 +113,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  inputContainer: {
-    width: '80%',
-    marginBottom: 10,
-  },
-  inputLabel: {
-    fontSize: 14,
-    marginBottom: 10,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    fontSize: 16,
   },
   loginButton: {
     backgroundColor: '#25D366',
