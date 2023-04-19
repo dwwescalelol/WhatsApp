@@ -24,6 +24,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -33,6 +34,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="camera-outline" size={size} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -50,6 +52,7 @@ const MainTabNavigator = () => {
               style={{ marginRight: 15 }}
             />
           ),
+          tabBarLabel: () => null,
         }}
       />
       <Tab.Screen
@@ -59,6 +62,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings-outline" size={size} color={color} />
           ),
+          tabBarLabel: () => null,
         }}
       />
     </Tab.Navigator>
