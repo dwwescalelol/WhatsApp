@@ -50,7 +50,7 @@ const SignUpScreen = () => {
     /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
   const validateName = (name) => {
-    if (name.length < 2) return 'Must be atleast 3 charecters';
+    if (name.length < 2) return 'Must be atleast 2 charecters';
     if (!alphabetRegex.test(name))
       return 'Name must consist of only alphabetical charecters';
     return null;
