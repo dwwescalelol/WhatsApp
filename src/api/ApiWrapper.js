@@ -33,8 +33,8 @@ const ApiWrapper = {
   },
 
   // LOGOUT
-  logout: async (token) => {
-    return await fetch(`${baseURL}/logout`, {
+  login: async (token) => {
+    return await fetch(`${baseURL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
