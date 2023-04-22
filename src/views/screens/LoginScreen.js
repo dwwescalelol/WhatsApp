@@ -48,6 +48,7 @@ const LoginScreen = () => {
       />
       {/* Password */}
       <InputField
+        isPassword={true}
         value={password}
         onChangeText={setPassword}
         placeholder="Password"

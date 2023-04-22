@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 const InputField = ({
   value,
+  isPassword,
   onChangeText,
   onFocus,
   placeholder,
@@ -17,6 +18,7 @@ const InputField = ({
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        secureTextEntry={isPassword}
         placeholderTextColor="grey"
         value={value}
         onChangeText={onChangeText}
@@ -32,6 +34,7 @@ const InputField = ({
 
 InputField.propTypes = {
   value: PropTypes.string,
+  isPassword: PropTypes.bool,
   onChangeText: PropTypes.func,
   onFocus: PropTypes.func,
   placeholder: PropTypes.string,

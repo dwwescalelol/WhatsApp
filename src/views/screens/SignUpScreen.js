@@ -29,7 +29,6 @@ const SignUpScreen = () => {
       email,
       password
     );
-    console.log(responce.status);
     if (responce.status == 201) navigation.navigate('LogIn');
     if (responce.status == 400) setApiResponce('Email is already registered.');
     if (responce.status == 500)
@@ -100,6 +99,7 @@ const SignUpScreen = () => {
       {/* Password */}
       <InputField
         value={password}
+        isPassword={true}
         onChangeText={setPassword}
         errorMessage={validatePassword(password)}
         placeholder="Password"
@@ -107,6 +107,7 @@ const SignUpScreen = () => {
       {/* Confirm Password */}
       <InputField
         label="Confirm Password"
+        isPassword={true}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         errorMessage={validateConfirmPassword(password, confirmPassword)}
