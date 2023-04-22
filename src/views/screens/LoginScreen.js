@@ -4,9 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import InputField from '../components/InputField';
 import emailValidator from 'email-validator';
-import ApiWrapper from '../../api/ApiWrapper';
-import { useStore } from '../../stores/AppStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ErrorMessage from '../components/ErrorMessage';
 import ApiHandler from '../../api/ApiHandler';
 
@@ -17,8 +14,6 @@ const LoginScreen = () => {
   const [submitted, setSubmitted] = useState('');
 
   const navigation = useNavigation();
-
-  const store = useStore();
 
   const handleLogin = async () => {
     setApiResponce('');

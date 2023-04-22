@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import { useStore } from '../../stores/AppStore';
-import ApiWrapper from '../../api/ApiWrapper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import ApiHandler from '../../api/ApiHandler';
 
 const SettingScreen = () => {
-  const store = useStore();
+  const [submitted, setSubmitted] = useState('');
 
   // implemeneted to a proffessional standard
   const handleLogout = async () => {
+    setSubmitted(true);
     try {
-      await ApiWrapper.logout(store.token);
-    } catch (error) {}
-    await AsyncStorage.clear();
-    await store.clearAll();
+      await ApiHandler.logout();
+    } catch (error) {
+    } finally {
+      setSubmitted(false);
+    }
   };
 
   return (

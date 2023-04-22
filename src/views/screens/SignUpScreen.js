@@ -21,7 +21,9 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
-    if (isSignUpValid()) {
+    if (
+      Validate.signUp(firstName, lastName, email, password, confirmPassword)
+    ) {
       setApiResponce('Make sure all fields are valid.');
       return;
     }
@@ -34,16 +36,6 @@ const SignUpScreen = () => {
     } finally {
       setSubmitted(false);
     }
-  };
-
-  const isSignUpValid = () => {
-    return (
-      Validate.name(firstName) ||
-      Validate.name(lastName) ||
-      Validate.email(email) ||
-      Validate.password(password) ||
-      Validate.confirmPassword(password, confirmPassword)
-    );
   };
 
   return (

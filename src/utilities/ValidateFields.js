@@ -27,6 +27,16 @@ const Validate = {
     if (!(password === confirmPassword)) return 'Passwords are not the same';
     return null;
   },
+
+  signUp: (firstName, lastName, email, password, confirmPassword) => {
+    return (
+      Validate.name(firstName) ||
+      Validate.name(lastName) ||
+      Validate.email(email) ||
+      Validate.password(password) ||
+      Validate.confirmPassword(password, confirmPassword)
+    );
+  },
 };
 
 export default Validate;

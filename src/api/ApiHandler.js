@@ -3,10 +3,10 @@ import ApiWrapper from './ApiWrapper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStore } from '../stores/AppStore';
 
-const store = useStore.getState();
-
 const ApiHandler = {
   login: async (email, password) => {
+    const store = useStore.getState();
+
     const responce = await ApiWrapper.login(email, password);
     if (responce.status === 200) {
       const sessionInfo = await responce.json();
@@ -23,6 +23,8 @@ const ApiHandler = {
   },
 
   signUp: async (firstName, lastName, email, password) => {
+    const store = useStore.getState();
+
     const responce = await ApiWrapper.register(
       firstName,
       lastName,
@@ -39,6 +41,17 @@ const ApiHandler = {
       await store.setUserId(sessionInfo.id);
       await store.setToken(sessionInfo.token);
     }
+    if (!responce.ok) {
+      throw new Error(await responce.text());
+    }
+  },
+
+  logout: async () => {
+    const store = useStore.getState();
+
+    const responce = await ApiWrapper.logout(store.token);
+    await AsyncStorage.clear();
+    await store.clearAll();
     if (!responce.ok) {
       throw new Error(await responce.text());
     }
