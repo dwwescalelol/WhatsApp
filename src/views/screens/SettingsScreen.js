@@ -1,12 +1,16 @@
 import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useStore } from '../../stores/AppStore';
+import ApiWrapper from '../../api/ApiWrapper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = () => {
-  const navigation = useNavigation();
+  const store = useStore();
 
-  const handleLogout = () => {
-    navigation.navigate('LogIn');
+  const handleLogout = async () => {
+    await ApiWrapper.logout(store.token);
+    await AsyncStorage.clear();
+    await store.clearAll();
   };
 
   return (

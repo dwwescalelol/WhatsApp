@@ -20,8 +20,11 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     setApiResponce('');
-    if (validateEmail(email)) {
-      setApiResponce('Must enter a valid email.');
+
+    const isValidEmail = validateEmail(email);
+
+    if (isValidEmail) {
+      setApiResponce(isValidEmail);
       return;
     }
 
@@ -33,11 +36,9 @@ const LoginScreen = () => {
       await AsyncStorage.setItem('token', sessionInfo.token);
       await store.setUserId(sessionInfo.id);
       await store.setToken(sessionInfo.token);
+    } else {
+      setApiResponce(await responce.text());
     }
-    if (responce.status == 400)
-      setApiResponce('Email and password do not match.');
-    if (responce.status == 500)
-      setApiResponce('What the fuck happend here then.');
     setSubmitted(false);
   };
 
@@ -50,13 +51,14 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <Ionicons name="logo-whatsapp" size={120} color={'#25D366'} />
       <Text style={styles.heading}>WhatsApp</Text>
+
       {/* Email */}
       <InputField
         value={email}
         onChangeText={setEmail}
-        errorMessage={validateEmail(email)}
         placeholder="Email Adress"
       />
+
       {/* Password */}
       <InputField
         isPassword={true}
@@ -77,10 +79,9 @@ const LoginScreen = () => {
       {/* Error Message */}
       {apiResponce ? (
         <Text style={styles.responceText}>{apiResponce}</Text>
-      ) : (
-        <Text>Dont have an account?</Text>
-      )}
+      ) : null}
 
+      <Text>Dont have an account?</Text>
       {/* Signup Button */}
       <TouchableOpacity
         style={styles.signupButton}
