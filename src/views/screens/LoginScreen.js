@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import InputField from '../components/InputField';
 import emailValidator from 'email-validator';
 import ApiWrapper from '../../api/ApiWrapper';
+import { useStore } from '../../stores/AppStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [apiResponce, setApiResponce] = useState('');
@@ -14,7 +16,10 @@ const LoginScreen = () => {
 
   const navigation = useNavigation();
 
+  const store = useStore();
+
   const handleLogin = async () => {
+    setApiResponce('');
     if (validateEmail(email)) {
       setApiResponce('Must enter a valid email.');
       return;
@@ -22,7 +27,13 @@ const LoginScreen = () => {
 
     setSubmitted(true);
     const responce = await ApiWrapper.login(email, password);
-    if (responce.status == 200) navigation.navigate('MainApp');
+    if (responce.status == 200) {
+      const sessionInfo = await responce.json();
+      await AsyncStorage.setItem('userId', sessionInfo.id);
+      await AsyncStorage.setItem('token', sessionInfo.token);
+      await store.setUserId(sessionInfo.id);
+      await store.setToken(sessionInfo.token);
+    }
     if (responce.status == 400)
       setApiResponce('Email and password do not match.');
     if (responce.status == 500)

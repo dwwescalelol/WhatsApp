@@ -20,6 +20,17 @@ const ApiWrapper = {
     });
   },
 
+  getUserInfo: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
   // LOGIN
   login: async (email, password) => {
     return await fetch(`${baseURL}/login`, {
