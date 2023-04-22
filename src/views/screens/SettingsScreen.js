@@ -7,8 +7,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const SettingScreen = () => {
   const store = useStore();
 
+  // implemeneted to a proffessional standard
   const handleLogout = async () => {
-    await ApiWrapper.logout(store.token);
+    try {
+      await ApiWrapper.logout(store.token);
+    } catch (error) {}
     await AsyncStorage.clear();
     await store.clearAll();
   };
@@ -19,9 +22,6 @@ const SettingScreen = () => {
     </View>
   );
 };
-
-export default SettingScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -38,3 +38,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
+
+export default SettingScreen;

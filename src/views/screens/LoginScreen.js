@@ -7,6 +7,8 @@ import emailValidator from 'email-validator';
 import ApiWrapper from '../../api/ApiWrapper';
 import { useStore } from '../../stores/AppStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorMessage from '../components/ErrorMessage';
+import ApiHandler from '../../api/ApiHandler';
 
 const LoginScreen = () => {
   const [apiResponce, setApiResponce] = useState('');
@@ -22,24 +24,19 @@ const LoginScreen = () => {
     setApiResponce('');
 
     const isValidEmail = validateEmail(email);
-
     if (isValidEmail) {
       setApiResponce(isValidEmail);
       return;
     }
 
     setSubmitted(true);
-    const responce = await ApiWrapper.login(email, password);
-    if (responce.status == 200) {
-      const sessionInfo = await responce.json();
-      await AsyncStorage.setItem('userId', sessionInfo.id);
-      await AsyncStorage.setItem('token', sessionInfo.token);
-      await store.setUserId(sessionInfo.id);
-      await store.setToken(sessionInfo.token);
-    } else {
-      setApiResponce(await responce.text());
+    try {
+      await ApiHandler.login(email, password);
+    } catch (error) {
+      setApiResponce(error.message);
+    } finally {
+      setSubmitted(false);
     }
-    setSubmitted(false);
   };
 
   const validateEmail = (email) => {
@@ -76,12 +73,9 @@ const LoginScreen = () => {
         <Text style={styles.loginText}>LOG IN</Text>
       </TouchableOpacity>
 
-      {/* Error Message */}
-      {apiResponce ? (
-        <Text style={styles.responceText}>{apiResponce}</Text>
-      ) : null}
-
+      <ErrorMessage message={apiResponce} />
       <Text>Dont have an account?</Text>
+
       {/* Signup Button */}
       <TouchableOpacity
         style={styles.signupButton}

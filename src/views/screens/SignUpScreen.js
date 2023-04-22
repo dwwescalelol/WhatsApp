@@ -3,8 +3,9 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import InputField from '../components/InputField';
-import emailValidator from 'email-validator';
-import ApiWrapper from '../../api/ApiWrapper';
+import ApiHandler from '../../api/ApiHandler';
+import ErrorMessage from '../components/ErrorMessage';
+import Validate from '../../utilities/ValidateFields';
 
 // TODO: handel aria-label for text inputs, cahnge handelSignUp to do onblur of all fields, maybe change button red
 
@@ -15,6 +16,7 @@ const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [submitted, setSubmitted] = useState('');
 
   const navigation = useNavigation();
 
@@ -23,53 +25,27 @@ const SignUpScreen = () => {
       setApiResponce('Make sure all fields are valid.');
       return;
     }
-    const responce = await ApiWrapper.register(
-      firstName,
-      lastName,
-      email,
-      password
-    );
-    if (responce.status == 201) navigation.navigate('LogIn');
-    if (responce.status == 400) setApiResponce('Email is already registered.');
-    if (responce.status == 500)
-      setApiResponce('What the fuck happend here then.');
+
+    setSubmitted(true);
+    try {
+      await ApiHandler.signUp(firstName, lastName, email, password);
+    } catch (error) {
+      setApiResponce(error.message);
+    } finally {
+      setSubmitted(false);
+    }
   };
 
   const isSignUpValid = () => {
     return (
-      validateName(firstName) ||
-      validateName(lastName) ||
-      validateEmail(email) ||
-      validatePassword(password) ||
-      validateConfirmPassword(password, confirmPassword)
+      Validate.name(firstName) ||
+      Validate.name(lastName) ||
+      Validate.email(email) ||
+      Validate.password(password) ||
+      Validate.confirmPassword(password, confirmPassword)
     );
   };
 
-  const alphabetRegex = /^[a-zA-Z]+$/;
-  const passwordRegex =
-    /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
-
-  const validateName = (name) => {
-    if (name.length < 2) return 'Must be atleast 2 charecters';
-    if (!alphabetRegex.test(name))
-      return 'Name must consist of only alphabetical charecters';
-    return null;
-  };
-
-  const validateEmail = (email) => {
-    if (!emailValidator.validate(email)) return 'Not a valid email';
-    return null;
-  };
-
-  const validatePassword = (password) => {
-    if (!passwordRegex.test(password)) return 'Password too week';
-    return null;
-  };
-
-  const validateConfirmPassword = (password, confirmPassword) => {
-    if (!(password === confirmPassword)) return 'Passwords are not the same';
-    return null;
-  };
   return (
     <View style={styles.container}>
       <Ionicons name="logo-whatsapp" size={120} color={'#25D366'} />
@@ -79,21 +55,21 @@ const SignUpScreen = () => {
       <InputField
         value={firstName}
         onChangeText={setFirstName}
-        errorMessage={validateName(firstName)}
+        errorMessage={Validate.name(firstName)}
         placeholder="First Name"
       />
       {/* Last name*/}
       <InputField
         value={lastName}
         onChangeText={setLastName}
-        errorMessage={validateName(lastName)}
+        errorMessage={Validate.name(lastName)}
         placeholder="Last Name"
       />
       {/* Email */}
       <InputField
         value={email}
         onChangeText={setEmail}
-        errorMessage={validateEmail(email)}
+        errorMessage={Validate.email(email)}
         placeholder="Email Adress"
       />
       {/* Password */}
@@ -101,7 +77,7 @@ const SignUpScreen = () => {
         value={password}
         isPassword={true}
         onChangeText={setPassword}
-        errorMessage={validatePassword(password)}
+        errorMessage={Validate.password(password)}
         placeholder="Password"
       />
       {/* Confirm Password */}
@@ -110,20 +86,21 @@ const SignUpScreen = () => {
         isPassword={true}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
-        errorMessage={validateConfirmPassword(password, confirmPassword)}
+        errorMessage={Validate.confirmPassword(password, confirmPassword)}
         placeholder="Current Password"
       />
-
-      <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
+      {/* Login Button */}
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={handleSignUp}
+        disabled={submitted}
+      >
         <Text style={styles.loginText}>SIGN UP</Text>
       </TouchableOpacity>
 
-      {apiResponce ? (
-        <Text style={styles.responceText}>{apiResponce}</Text>
-      ) : (
-        <Text>Already have an account?</Text>
-      )}
-
+      <ErrorMessage message={apiResponce} />
+      <Text>Already have an account?</Text>
+      {/* Signup Button */}
       <TouchableOpacity
         style={styles.signupButton}
         onPress={() => navigation.navigate('LogIn')}

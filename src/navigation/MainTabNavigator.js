@@ -2,9 +2,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotImplementedScreen from '../views/screens/NotImplementedScreen';
 import ChatsScreen from '../views/screens/ChatsScreen';
-import { Ionicons, Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import ContactsScreen from '../views/screens/ContactsScreen';
 import SettingScreen from '../views/screens/SettingsScreen';
+import IconButton from '../views/components/IconButton';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
           ),
+          headerRight: () => <IconButton iconName={'person-add-outline'} />,
           tabBarLabel: () => null,
         }}
       />
@@ -44,14 +46,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles-outline" size={size} color={color} />
           ),
-          headerRight: () => (
-            <Entypo
-              name="new-message"
-              size={18}
-              color={'royalblue'}
-              style={{ marginRight: 15 }}
-            />
-          ),
+          headerRight: () => <IconButton iconName={'ios-add-circle-outline'} />,
           tabBarLabel: () => null,
         }}
       />
