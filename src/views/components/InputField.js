@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
+import ErrorMessage from './ErrorMessage';
 
 const InputField = ({
   value,
@@ -27,7 +28,7 @@ const InputField = ({
         }}
         onFocus={onFocus}
       />
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      <ErrorMessage message={error} />
     </View>
   );
 };
