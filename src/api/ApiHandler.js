@@ -48,6 +48,18 @@ const ApiHandler = {
     if (responce.status == 500) throw new Error('Server error...');
   },
 
+  getAvatar: async (token, userId) => {
+    const response = await ApiWrapper.getAvatar(token, userId);
+    if (response.status === 200) {
+      const imageBlob = await response.blob();
+      const imageUrl = URL.createObjectURL(imageBlob);
+      return imageUrl;
+    }
+    if (response.status === 401) throw new Error('Not authorised to view.');
+    if (response.status === 404) throw new Error('User cannot be found.');
+    if (response.status === 500) throw new Error('Server error...');
+  },
+
   // LOGIN
   login: async (email, password) => {
     const store = useStore.getState();

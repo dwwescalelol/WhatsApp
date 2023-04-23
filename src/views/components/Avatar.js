@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
+import ApiHandler from '../../api/ApiHandler';
+import { useStore } from '../../stores/AppStore';
 
 const Avatar = ({ userId }) => {
   const [avatarUri, setAvatarUri] = useState('');
+  const store = useStore();
 
   const getUserProfile = async () => {
-    // API call logic to get user profile
-    // For now, this is a placeholder image
-    return 'https://cdn.discordapp.com/attachments/1061351144389103719/1099488148502876160/313.jpg';
+    return await ApiHandler.getAvatar(store.token, store.userId);
   };
 
   useEffect(() => {

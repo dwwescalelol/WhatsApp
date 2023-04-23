@@ -43,6 +43,16 @@ const ApiWrapper = {
     });
   },
 
+  getAvatar: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}/photo`, {
+      method: 'GET',
+      headers: {
+        Accept: 'image/png, image/jpeg',
+        'X-Authorization': token,
+      },
+    });
+  },
+
   // LOGIN
   login: async (email, password) => {
     return await fetch(`${baseURL}/login`, {
