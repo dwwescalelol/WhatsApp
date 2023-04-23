@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
 import Profile from '../components/Profile';
 import Validate from '../../utilities/ValidateFields';
 import SucsessMessage from '../components/SucsessMessage';
+import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 
 const SettingScreen = () => {
@@ -43,15 +44,13 @@ const SettingScreen = () => {
       };
 
       // if no change, throw error
-      console.log(originalData);
-      console.log(changedUserInfo);
       if (
         Object.keys(originalData).every(
           (key) => changedUserInfo[key] === originalData[key]
         ) ||
         !changedUserInfo
       ) {
-        throw new Error('blah blah blah');
+        throw new Error('No change in details, try again.');
       }
 
       await ApiHandler.updateUserInfo(store.token, store.userId, userData);
@@ -68,20 +67,37 @@ const SettingScreen = () => {
   };
 
   return (
-    <View>
-      <Profile userId={store.userId} editable onUpdate={onProfileUpdate} />
-      <SucsessMessage message={sucsess} />
-      <ErrorMessage message={error} />
-
-      <Button
-        title="Confirm Changes"
-        onPress={() => {
-          handleUpdateUserInfo(changedUserInfo);
-        }}
-      />
-      <Button title="Logout" onPress={handleLogout} />
+    <View style={styles.container}>
+      <View>
+        <Profile userId={store.userId} editable onUpdate={onProfileUpdate} />
+        <SucsessMessage message={sucsess} />
+        <ErrorMessage message={error} />
+      </View>
+      <View style={styles.buttons}>
+        <Button
+          label="Confirm Changes"
+          onPress={() => {
+            handleUpdateUserInfo(changedUserInfo);
+          }}
+          disabled={submitted}
+          style={{ marginBottom: 10 }}
+          invert
+        />
+        <Button label="Logout" onPress={handleLogout} />
+      </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  buttons: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default SettingScreen;

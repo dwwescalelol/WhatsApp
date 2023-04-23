@@ -6,6 +6,7 @@ import InputField from '../components/InputField';
 import emailValidator from 'email-validator';
 import ErrorMessage from '../components/ErrorMessage';
 import ApiHandler from '../../api/ApiHandler';
+import Button from '../components/Button';
 
 const LoginScreen = () => {
   const [error, setError] = useState('');
@@ -60,24 +61,17 @@ const LoginScreen = () => {
       />
 
       {/* Login Button */}
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={handleLogin}
-        disabled={submitted}
-      >
-        <Text style={styles.loginText}>LOG IN</Text>
-      </TouchableOpacity>
+      <Button label="LOG IN" onPress={handleLogin} disabled={submitted} />
 
       <ErrorMessage message={error} />
       <Text>Dont have an account?</Text>
 
       {/* Signup Button */}
-      <TouchableOpacity
-        style={styles.signupButton}
+      <Button
+        label="SIGN UP"
         onPress={() => navigation.navigate('SignUp')}
-      >
-        <Text style={styles.signupText}>SIGN UP</Text>
-      </TouchableOpacity>
+        invert
+      />
     </View>
   );
 };
@@ -93,31 +87,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  loginButton: {
-    backgroundColor: '#25D366',
-    padding: 10,
-    borderRadius: 5,
-    width: '80%',
-  },
-  loginText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  signupButton: {
-    padding: 5,
-    width: '80%',
-  },
-  signupText: {
-    color: '#25D366',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  responceText: {
-    color: 'red',
   },
 });
 

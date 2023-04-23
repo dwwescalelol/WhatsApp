@@ -61,43 +61,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
   },
-
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginVertical: 16,
-  },
-  userInfo: {
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  username: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  status: {
-    fontSize: 18,
-    color: 'lightgray',
-  },
-  separator: {
-    height: 1,
-    width: '90%',
-    backgroundColor: '#c7c7c7',
-    marginVertical: 16,
-  },
-  infoContainer: {
-    width: '90%',
-  },
-  infoTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  infoText: {
-    fontSize: 18,
-    color: '#000000',
-  },
 });
 
 export default Profile;

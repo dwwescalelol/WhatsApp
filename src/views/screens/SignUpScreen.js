@@ -6,11 +6,12 @@ import InputField from '../components/InputField';
 import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from '../components/ErrorMessage';
 import Validate from '../../utilities/ValidateFields';
+import Button from '../components/Button';
 
 // TODO: handel aria-label for text inputs, cahnge handelSignUp to do onblur of all fields, maybe change button red
 
 const SignUpScreen = () => {
-  const [apiResponce, setApiResponce] = useState('');
+  const [error, setError] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -21,10 +22,12 @@ const SignUpScreen = () => {
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
+    setError('');
+
     if (
       Validate.signUp(firstName, lastName, email, password, confirmPassword)
     ) {
-      setApiResponce('Make sure all fields are valid.');
+      setError('Make sure all fields are valid.');
       return;
     }
 
@@ -32,7 +35,7 @@ const SignUpScreen = () => {
     try {
       await ApiHandler.signUp(firstName, lastName, email, password);
     } catch (error) {
-      setApiResponce(error.message);
+      setError(error.message);
     } finally {
       setSubmitted(false);
     }
@@ -80,24 +83,19 @@ const SignUpScreen = () => {
         errorMessage={Validate.confirmPassword(password, confirmPassword)}
         placeholder="Current Password"
       />
-      {/* Login Button */}
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={handleSignUp}
-        disabled={submitted}
-      >
-        <Text style={styles.loginText}>SIGN UP</Text>
-      </TouchableOpacity>
 
-      <ErrorMessage message={apiResponce} />
-      <Text>Already have an account?</Text>
       {/* Signup Button */}
-      <TouchableOpacity
-        style={styles.signupButton}
+      <Button label="SIGN UP" onPress={handleSignUp} disabled={submitted} />
+
+      <ErrorMessage message={error} />
+      <Text>Already have an account?</Text>
+
+      {/* LogIn Button */}
+      <Button
+        label="LOG IN"
         onPress={() => navigation.navigate('LogIn')}
-      >
-        <Text style={styles.signupText}>LOG IN</Text>
-      </TouchableOpacity>
+        invert
+      />
     </View>
   );
 };
@@ -113,31 +111,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  loginButton: {
-    backgroundColor: '#25D366',
-    padding: 10,
-    borderRadius: 5,
-    width: '80%',
-  },
-  loginText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  signupButton: {
-    padding: 5,
-    width: '80%',
-  },
-  signupText: {
-    color: '#25D366',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  responceText: {
-    color: 'red',
   },
 });
 
