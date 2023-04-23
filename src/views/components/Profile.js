@@ -50,7 +50,7 @@ const Profile = ({ userId, editable, onUpdate }) => {
 };
 
 Profile.propTypes = {
-  userId: PropTypes.string,
+  userId: PropTypes.number,
   editable: PropTypes.bool,
   onUpdate: PropTypes.func,
 };

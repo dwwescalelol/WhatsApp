@@ -18,7 +18,7 @@ export default function App() {
 
       if (token) {
         store.setToken(token);
-        store.setUserId(userId);
+        store.setUserId(parseInt(userId));
       }
     }
 

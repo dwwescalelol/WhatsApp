@@ -29,7 +29,7 @@ const Avatar = ({ userId }) => {
 };
 
 Avatar.propTypes = {
-  userId: PropTypes.string,
+  userId: PropTypes.number,
 };
 
 export default Avatar;

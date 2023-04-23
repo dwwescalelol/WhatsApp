@@ -16,6 +16,13 @@ export const useStore = create((set, get) => ({
   setLastName: (lastName) => set({ lastName }),
   setEmail: (email) => set({ email }),
 
+  updateUserInfo: (firstName, lastName, email) =>
+    set({
+      firstName,
+      lastName,
+      email,
+    }),
+
   clearAll: () =>
     set({
       userId: null,

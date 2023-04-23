@@ -29,6 +29,8 @@ const ApiHandler = {
   },
 
   updateUserInfo: async (token, userId, data) => {
+    const store = useStore.getState();
+
     const { firstName, lastName, email, password } = data;
     const responce = await ApiWrapper.updateUserInfo(token, userId, {
       first_name: firstName,
@@ -36,7 +38,10 @@ const ApiHandler = {
       email,
       password,
     });
-    if (responce.status == 200) return responce.text();
+    if (responce.status == 200) {
+      await store.updateUserInfo(firstName, lastName, email);
+      return responce.text();
+    }
     if (responce.status == 401) throw new Error('Not authorised to view.');
     if (responce.status == 403) throw new Error('Forbidden.');
     if (responce.status == 404) throw new Error('User cannot be found.');

@@ -69,24 +69,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     alignItems: 'center',
   },
-
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginVertical: 16,
-  },
   userInfo: {
     alignItems: 'center',
     marginBottom: 16,
-  },
-  username: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  status: {
-    fontSize: 18,
-    color: 'lightgray',
+    width: '70%',
   },
   separator: {
     height: 1,
@@ -101,10 +87,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  infoText: {
-    fontSize: 18,
-    color: '#000000',
   },
 });
 

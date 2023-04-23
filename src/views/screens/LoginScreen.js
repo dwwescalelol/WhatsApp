@@ -8,7 +8,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import ApiHandler from '../../api/ApiHandler';
 
 const LoginScreen = () => {
-  const [apiResponce, setApiResponce] = useState('');
+  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitted, setSubmitted] = useState('');
@@ -16,11 +16,11 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    setApiResponce('');
+    setError('');
 
     const isValidEmail = validateEmail(email);
     if (isValidEmail) {
-      setApiResponce(isValidEmail);
+      setError(isValidEmail);
       return;
     }
 
@@ -28,7 +28,7 @@ const LoginScreen = () => {
     try {
       await ApiHandler.login(email, password);
     } catch (error) {
-      setApiResponce(error.message);
+      setError(error.message);
     } finally {
       setSubmitted(false);
     }
@@ -68,7 +68,7 @@ const LoginScreen = () => {
         <Text style={styles.loginText}>LOG IN</Text>
       </TouchableOpacity>
 
-      <ErrorMessage message={apiResponce} />
+      <ErrorMessage message={error} />
       <Text>Dont have an account?</Text>
 
       {/* Signup Button */}
