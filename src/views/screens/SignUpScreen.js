@@ -74,7 +74,6 @@ const SignUpScreen = () => {
       />
       {/* Confirm Password */}
       <InputField
-        label="Confirm Password"
         isPassword={true}
         value={confirmPassword}
         onChangeText={setConfirmPassword}

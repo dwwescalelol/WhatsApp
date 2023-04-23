@@ -31,6 +31,18 @@ const ApiWrapper = {
     });
   },
 
+  updateUserInfo: async (token, userId, data) => {
+    return await fetch(`${baseURL}/user/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+      body: JSON.stringify(data),
+    });
+  },
+
   // LOGIN
   login: async (email, password) => {
     return await fetch(`${baseURL}/login`, {

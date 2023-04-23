@@ -1,54 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import Avatar from './Avatar';
+import ApiHandler from '../../api/ApiHandler';
+import { useStore } from '../../stores/AppStore';
+import EditableProfile from './EditableProfile';
+import NonEditableProfile from './NonEditableProfile';
 
-const Profile = ({ user }) => {
+const Profile = ({ userId, editable, onUpdate }) => {
+  const [user, setUser] = useState({});
+  const [error, setError] = useState('');
+
+  const store = useStore();
+
+  const getUserData = async (userId) => {
+    try {
+      const responce = await ApiHandler.getUserInfo(store.token, userId);
+
+      return {
+        firstName: responce.first_name,
+        lastName: responce.last_name,
+        email: responce.email,
+      };
+    } catch (error) {
+      setError(error.message);
+      return {
+        firstName: error.message,
+        lastName: 'hello',
+        email: 'hello',
+      };
+    }
+  };
+
+  useEffect(() => {
+    getUserData(userId).then((userData) => setUser(userData));
+  }, [userId]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.body}>
-        <Image source={{ uri: user.image }} style={styles.avatar} />
-        <View style={styles.userInfo}>
-          <Text style={styles.username}>{user.name}</Text>
-          <Text style={styles.status}>Available</Text>
-        </View>
-        <View style={styles.separator} />
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoTitle}>Status</Text>
-          <Text style={styles.infoText}>
-            {user.status == null ? 'default status' : user.status}
-          </Text>
-        </View>
-        <View style={styles.separator} />
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoTitle}>Phone</Text>
-          <Text style={styles.infoText}>+1 (123) 456-7890</Text>
-        </View>
-        <View style={styles.separator} />
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Block</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.muteButton]}>
-            <Text style={[styles.buttonText, styles.muteButtonText]}>Mute</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Avatar userId={userId} />
+
+      {editable ? (
+        <EditableProfile user={user} onUpdate={onUpdate} />
+      ) : (
+        <NonEditableProfile user={user} />
+      )}
     </View>
   );
 };
 
 Profile.propTypes = {
-  user: PropTypes.object,
+  userId: PropTypes.string,
+  editable: PropTypes.bool,
+  onUpdate: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-  },
-  body: {
     alignItems: 'center',
   },
+
   avatar: {
     width: 120,
     height: 120,

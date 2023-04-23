@@ -1,4 +1,3 @@
-import React from 'react';
 import emailValidator from 'email-validator';
 
 const alphabetRegex = /^[a-zA-Z]+$/;
@@ -35,6 +34,14 @@ const Validate = {
       Validate.email(email) ||
       Validate.password(password) ||
       Validate.confirmPassword(password, confirmPassword)
+    );
+  },
+
+  updateInfo: (firstName, lastName, email) => {
+    return (
+      Validate.name(firstName) ||
+      Validate.name(lastName) ||
+      Validate.email(email)
     );
   },
 };
