@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
-import Profile from '../components/Profile';
-import Validate from '../../utilities/ValidateFields';
 import SucsessMessage from '../components/SucsessMessage';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
+import EditableProfile from '../components/EditableProfile';
 
 const SettingScreen = () => {
   const store = useStore();
@@ -14,8 +13,8 @@ const SettingScreen = () => {
   const [changedUserInfo, setChangedUserInfo] = useState({});
   const [error, setError] = useState('');
   const [sucsess, setSucsess] = useState('');
+  const [avatar, setAvatar] = useState(null);
 
-  // implemented to a professional standard
   const handleLogout = async () => {
     setSucsess('');
     setError('');
@@ -45,10 +44,11 @@ const SettingScreen = () => {
 
       // if no change, throw error
       if (
-        Object.keys(originalData).every(
+        (Object.keys(originalData).every(
           (key) => changedUserInfo[key] === originalData[key]
         ) ||
-        !changedUserInfo
+          !changedUserInfo) &&
+        !avatar
       ) {
         throw new Error('No change in details, try again.');
       }
@@ -66,21 +66,45 @@ const SettingScreen = () => {
     setChangedUserInfo({ firstName, lastName, email });
   };
 
+  const onAvatarUpdate = (avatar) => {
+    setAvatar(avatar);
+  };
+
+  const handleUpdateAvatar = async () => {
+    if (avatar) {
+      try {
+        const blob = await (await fetch(avatar)).blob();
+        await ApiHandler.uploadAvatar(store.token, store.userId, blob);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+  };
+
+  const handleConfirmChanges = async () => {
+    setError('');
+    setSucsess('');
+    await handleUpdateUserInfo(changedUserInfo);
+    await handleUpdateAvatar();
+  };
+
   return (
     <View style={styles.container}>
       <View>
-        <Profile userId={store.userId} editable onUpdate={onProfileUpdate} />
-        <SucsessMessage message={sucsess} />
-        <ErrorMessage message={error} />
+        <EditableProfile
+          onUpdate={onProfileUpdate}
+          onAvatarUpdate={onAvatarUpdate}
+        />
       </View>
       <View style={styles.buttons}>
+        <SucsessMessage message={sucsess} />
+        <ErrorMessage message={error} />
+
         <Button
           label="Confirm Changes"
-          onPress={() => {
-            handleUpdateUserInfo(changedUserInfo);
-          }}
+          onPress={handleConfirmChanges} // Call the new function to handle both updates
           disabled={submitted}
-          style={{ marginBottom: 10 }}
+          style={{ margin: 10 }}
           invert
         />
         <Button label="Logout" onPress={handleLogout} />
@@ -92,7 +116,7 @@ const SettingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
   },
   buttons: {
     justifyContent: 'center',

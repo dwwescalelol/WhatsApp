@@ -12,7 +12,7 @@ SucsessMessage.propTypes = {
 
 const styles = StyleSheet.create({
   responseText: {
-    color: 'green',
+    color: '#25D366',
   },
 });
 

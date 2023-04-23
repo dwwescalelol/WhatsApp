@@ -4,7 +4,7 @@ import { Image } from 'react-native';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
 
-const Avatar = ({ userId }) => {
+const Avatar = ({ userId, uri = null }) => {
   const [avatarUri, setAvatarUri] = useState('');
   const store = useStore();
 
@@ -13,8 +13,9 @@ const Avatar = ({ userId }) => {
   };
 
   useEffect(() => {
-    getUserProfile().then((uri) => setAvatarUri(uri));
-  }, [userId]);
+    if (userId && !uri) getUserProfile().then((uri) => setAvatarUri(uri));
+    else setAvatarUri(uri);
+  }, [userId, uri]);
 
   return (
     <Image
@@ -31,6 +32,7 @@ const Avatar = ({ userId }) => {
 
 Avatar.propTypes = {
   userId: PropTypes.number,
+  uri: PropTypes.string,
 };
 
 export default Avatar;

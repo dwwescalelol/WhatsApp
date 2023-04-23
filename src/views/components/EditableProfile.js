@@ -1,26 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import ApiHandler from '../../api/ApiHandler';
+import { useStore } from '../../stores/AppStore';
+import Avatar from './Avatar';
 import InputField from './InputField';
 import Validate from '../../utilities/ValidateFields';
 
-const EditableProfile = ({ user, onUpdate }) => {
-  const [firstName, setFirstName] = useState(user.firstName || '');
-  const [lastName, setLastName] = useState(user.lastName || '');
-  const [email, setEmail] = useState(user.email || '');
+const EditableProfile = ({ onUpdate, onAvatarUpdate }) => {
+  const store = useStore();
+  const userId = store.userId;
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState(null);
 
+  const getUserData = async (userId) => {
+    try {
+      const response = await ApiHandler.getUserInfo(store.token, userId);
+
+      return {
+        firstName: response.first_name,
+        lastName: response.last_name,
+        email: response.email,
+      };
+    } catch (error) {
+      return {
+        firstName: error.message,
+        lastName: 'hello',
+        email: 'hello',
+      };
+    }
+  };
+
+  // set properties
   useEffect(() => {
-    setFirstName(user.firstName || '');
-    setLastName(user.lastName || '');
-    setEmail(user.email || '');
-  }, [user]);
+    getUserData(userId).then((userData) => {
+      setFirstName(userData.firstName || '');
+      setLastName(userData.lastName || '');
+      setEmail(userData.email || '');
+    });
+  }, [userId]);
 
+  // passup properties
   useEffect(() => {
     onUpdate(firstName, lastName, email);
   }, [firstName, lastName, email]);
 
+  useEffect(() => {
+    if (avatar) onAvatarUpdate(avatar);
+  }, [avatar]);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (result.canceled === false) {
+      const { assets } = result;
+      const uri = assets[0].uri;
+      setAvatar(uri);
+    }
+  };
+
   return (
-    <>
+    <View style={styles.container}>
+      <TouchableOpacity onPress={pickImage}>
+        {avatar ? <Avatar uri={avatar} /> : <Avatar userId={store.userId} />}
+      </TouchableOpacity>
+
       {/* first and last name */}
       <View style={styles.userInfo}>
         <InputField
@@ -54,13 +106,13 @@ const EditableProfile = ({ user, onUpdate }) => {
       </View>
 
       <View style={styles.separator} />
-    </>
+    </View>
   );
 };
 
 EditableProfile.propTypes = {
-  user: PropTypes.object,
   onUpdate: PropTypes.func,
+  onAvatarUpdate: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
