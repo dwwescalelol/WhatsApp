@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import { Text, Image, StyleSheet, Pressable, View } from 'react-native';
+import { Text, StyleSheet, Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Avatar from './Avatar';
 
@@ -13,6 +13,8 @@ const ContactListItem = ({ user }) => {
       onPress={() => navigation.navigate('Profile', { user })}
       style={({ pressed }) => [
         {
+          flex: 1,
+          width: '100%',
           backgroundColor: pressed ? 'lightgray' : 'white',
         },
       ]}
@@ -42,6 +44,7 @@ ContactListItem.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     flexDirection: 'row',
     marginHorizontal: 10,
     marginVertical: 5,

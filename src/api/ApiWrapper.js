@@ -89,6 +89,25 @@ const ApiWrapper = {
   },
 
   // SEARCH
+  searchUsers: async (
+    token,
+    query,
+    searchIn = 'all',
+    limit = 20,
+    offset = 0
+  ) => {
+    return await fetch(
+      `${baseURL}/search?q=${query}&search_in=${searchIn}&limit=${limit}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-Authorization': token,
+        },
+      }
+    );
+  },
 
   // CONTACTS
   getContacts: async (token) => {

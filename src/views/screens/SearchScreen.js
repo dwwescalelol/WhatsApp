@@ -1,41 +1,62 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, FlatList } from 'react-native';
 import InputField from '../components/InputField';
-import Switch from '../components/Switch';
+import ApiHandler from '../../api/ApiHandler';
+import { useStore } from '../../stores/AppStore';
+import ContactListItem from '../components/ContactListItem';
+import ErrorMessage from '../components/ErrorMessage';
 
 const SearchScreen = () => {
-  const [searchText, setSearchText] = useState('');
-  const [searchBy, setSearchBy] = useState('firstName');
+  const store = useStore();
 
-  const toggleSwitch = (value) => {
-    setSearchBy(value);
+  const [searchText, setSearchText] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [error, setError] = useState('');
+
+  const searchUsers = async (query) => {
+    try {
+      const results = await ApiHandler.searchUsers(store.token, query);
+      setSearchResults(results);
+    } catch (error) {
+      setError('Error searching users:', error);
+      setSearchResults([]);
+    }
   };
+
+  useEffect(() => {
+    if (searchText.length > 0) {
+      searchUsers(searchText);
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchText]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.switchContainer}>
-        <Switch
-          label="First Name"
-          value={searchBy === 'firstName'}
-          onValueChange={() => toggleSwitch('firstName')}
+      <View style={styles.searchContainer}>
+        <InputField
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholder="Search"
         />
-        <Switch
-          label="Last Name"
-          value={searchBy === 'lastName'}
-          onValueChange={() => toggleSwitch('lastName')}
-        />
-        <Switch
-          label="Email"
-          value={searchBy === 'email'}
-          onValueChange={() => toggleSwitch('email')}
+        <ErrorMessage message={error} />
+      </View>
+      <View>
+        <FlatList
+          data={searchResults}
+          renderItem={({ item }) => (
+            <ContactListItem
+              user={{
+                userId: item.user_id,
+                firstName: item.given_name,
+                lastName: item.family_name,
+                email: item.email,
+              }}
+            />
+          )}
+          style={styles.list}
         />
       </View>
-      <InputField
-        value={searchText}
-        onChangeText={setSearchText}
-        placeholder="Search"
-      />
-      {/* Render the search results here */}
     </View>
   );
 };
@@ -44,18 +65,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  switchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  searchContainer: {
+    paddingTop: 10,
+    backgroundColor: 'white',
     alignItems: 'center',
-    marginBottom: 20,
-    width: '80%',
+    borderBottomWidth: 1,
+    borderColor: '#c7c7c7',
   },
-  switchItem: {
-    alignItems: 'center',
+  list: {
+    backgroundColor: 'white',
+    width: '100%',
+    flex: 1,
   },
 });
 

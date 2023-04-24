@@ -106,6 +106,25 @@ const ApiHandler = {
   },
 
   // SEARCH
+  searchUsers: async (
+    token,
+    query,
+    searchIn = 'all',
+    limit = 20,
+    offset = 0
+  ) => {
+    const response = await ApiWrapper.searchUsers(
+      token,
+      query,
+      searchIn,
+      limit,
+      offset
+    );
+    if (response.status === 200) return response.json();
+    if (response.status === 401) throw new Error('Not authorised to view.');
+    if (response.status === 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
+  },
 
   // CONTACTS
   getContacts: async (token) => {
@@ -113,6 +132,7 @@ const ApiHandler = {
     if (response.status == 200) return response.json();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
   },
 };
 
