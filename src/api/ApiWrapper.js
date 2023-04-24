@@ -86,6 +86,26 @@ const ApiWrapper = {
     });
   },
 
+  blockUser: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}/block`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
+  unblockUser: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}/block`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
   // LOGIN
   login: async (email, password) => {
     return await fetch(`${baseURL}/login`, {

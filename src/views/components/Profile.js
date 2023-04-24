@@ -5,27 +5,26 @@ import { StyleSheet, View, Text } from 'react-native';
 import Button from './Button';
 import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from './ErrorMessage';
+import { useStore } from '../../stores/AppStore';
 
 const Profile = ({ user }) => {
+  const store = useStore();
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [contact, setContact] = useState('');
+  const [blocked, setBlocked] = useState('');
 
-  const isContact = async () => {
-    setError('');
-
+  const checkIfContact = async () => {
     try {
-      const contacts = await ApiHandler.getContacts();
-      return (
-        contacts.filter((contact) => contact.user_id == user.userId).length == 1
-      );
+      const contacts = store.contacts;
+      return contacts.some((contact) => contact.user_id === user.userId);
     } catch (error) {
       setError(error.message);
     }
   };
 
-  const idk = async () => {
-    setContact(await isContact());
+  const updateContactState = async () => {
+    setContact(await checkIfContact());
   };
 
   const handleAddContact = async () => {
@@ -35,16 +34,18 @@ const Profile = ({ user }) => {
     try {
       await ApiHandler.addContact(user.userId);
     } catch (error) {
-      console.log(error.message);
       setError(error.message);
     } finally {
       setSubmitted(false);
     }
   };
 
+  useEffect(() => {
+    updateContactState();
+  }, [submitted]);
+
   const handleRemoveContact = async () => {
     setSubmitted(true);
-
     setError('');
 
     try {
@@ -57,9 +58,33 @@ const Profile = ({ user }) => {
     }
   };
 
-  useEffect(() => {
-    idk();
-  }, [submitted]);
+  const handleBlock = async () => {
+    setSubmitted(true);
+    setError('');
+
+    try {
+      await ApiHandler.blockUser(store.token, user.userId);
+      setBlocked(true);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setSubmitted(false);
+    }
+  };
+
+  const handleUnblock = async () => {
+    setSubmitted(true);
+    setError('');
+
+    try {
+      await ApiHandler.unblockUser(store.token, user.userId);
+      setBlocked(false);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setSubmitted(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -97,6 +122,23 @@ const Profile = ({ user }) => {
           label="Add Contact"
           style={styles.button}
           invert
+        />
+      )}
+
+      {blocked ? (
+        <Button
+          onPress={handleUnblock}
+          label="Unblock"
+          style={styles.button}
+          color="red"
+          invert
+        />
+      ) : (
+        <Button
+          onPress={handleBlock}
+          label="Block"
+          style={styles.button}
+          color="red"
         />
       )}
     </View>

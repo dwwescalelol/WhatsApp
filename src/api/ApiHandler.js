@@ -105,6 +105,33 @@ const ApiHandler = {
     throw new Error('An unexpected error occurred.');
   },
 
+  blockUser: async (token, userId) => {
+    const response = await ApiWrapper.blockUser(token, userId);
+    if (response.status == 200) {
+      return response.text();
+    }
+    if (response.status == 400)
+      throw new Error('Cannot block user who is not a contact.');
+    if (response.status == 401) throw new Error('Not authorised to view.');
+    if (response.status == 404) throw new Error('User cannot be found.');
+    if (response.status == 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  unblockUser: async (token, userId) => {
+    const response = await ApiWrapper.unblockUser(token, userId);
+    if (response.status == 200) {
+      return response.text();
+    }
+    if (response.status == 400)
+      throw new Error('Cannot unblock user who is not a contact.');
+    if (response.status == 401) throw new Error('Not authorised to view.');
+    if (response.status == 403) throw new Error('Forbidden.');
+    if (response.status == 404) throw new Error('User cannot be found.');
+    if (response.status == 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
+  },
+
   // LOGIN
   login: async (email, password) => {
     const store = useStore.getState();
