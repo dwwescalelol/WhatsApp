@@ -16,7 +16,7 @@ const SearchScreen = () => {
   const searchUsers = async (query) => {
     try {
       const results = await ApiHandler.searchUsers(store.token, query);
-      setSearchResults(results);
+      setSearchResults(results.filter((user) => user.user_id != store.userId));
     } catch (error) {
       setError('Error searching users:', error);
       setSearchResults([]);
