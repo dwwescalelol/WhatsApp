@@ -3,13 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, Image, StyleSheet, Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Avatar from './Avatar';
 
 const ContactListItem = ({ user }) => {
   const navigation = useNavigation();
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('Profile', { user: user })}
+      onPress={() => navigation.navigate('Profile', { user })}
       style={({ pressed }) => [
         {
           backgroundColor: pressed ? 'lightgray' : 'white',
@@ -17,17 +18,15 @@ const ContactListItem = ({ user }) => {
       ]}
     >
       <View style={styles.container}>
-        <Image source={{ uri: user.image }} style={styles.image} />
+        <Avatar userId={user.userId} style={styles.image} />
 
         <View style={styles.content}>
           <Text style={styles.name} numberOfLines={1}>
-            {user.name}
+            {user.firstName} {user.lastName}
           </Text>
 
           <Text numberOfLines={1} style={styles.subTitle}>
-            {user.status == null
-              ? 'Hey there! I am using WhatsApp.'
-              : user.status}
+            {user.email}
           </Text>
 
           <View style={styles.separator} />

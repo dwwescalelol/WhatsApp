@@ -7,6 +7,7 @@ const Profile = ({ user }) => {
   return (
     <View style={styles.container}>
       <Avatar userId={user.userId} />
+
       {/* first and last name */}
       <View style={styles.userInfo}>
         <Text style={styles.username}>

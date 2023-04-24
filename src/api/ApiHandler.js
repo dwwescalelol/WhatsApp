@@ -104,6 +104,16 @@ const ApiHandler = {
       throw new Error(await response.text());
     }
   },
+
+  // SEARCH
+
+  // CONTACTS
+  getContacts: async (token) => {
+    const response = await ApiWrapper.getContacts(token);
+    if (response.status == 200) return response.json();
+    if (response.status == 401) throw new Error('Not authorised to view.');
+    if (response.status == 500) throw new Error('Server error...');
+  },
 };
 
 export default ApiHandler;

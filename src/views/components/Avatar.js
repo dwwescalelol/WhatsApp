@@ -4,12 +4,16 @@ import { Image } from 'react-native';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
 
-const Avatar = ({ userId, uri = null }) => {
+const Avatar = ({ userId, uri = null, style }) => {
   const [avatarUri, setAvatarUri] = useState('');
   const store = useStore();
 
   const getUserProfile = async () => {
-    return await ApiHandler.getAvatar(store.token, store.userId);
+    try {
+      return await ApiHandler.getAvatar(store.token, userId);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -20,12 +24,15 @@ const Avatar = ({ userId, uri = null }) => {
   return (
     <Image
       source={{ uri: avatarUri }}
-      style={{
-        margin: 20,
-        width: 120,
-        height: 120,
-        borderRadius: 60,
-      }}
+      style={[
+        {
+          margin: 20,
+          width: 120,
+          height: 120,
+          borderRadius: 60,
+        },
+        style,
+      ]}
     />
   );
 };
@@ -33,6 +40,7 @@ const Avatar = ({ userId, uri = null }) => {
 Avatar.propTypes = {
   userId: PropTypes.number,
   uri: PropTypes.string,
+  style: PropTypes.object,
 };
 
 export default Avatar;

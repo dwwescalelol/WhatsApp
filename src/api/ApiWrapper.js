@@ -91,6 +91,16 @@ const ApiWrapper = {
   // SEARCH
 
   // CONTACTS
+  getContacts: async (token) => {
+    return await fetch(`${baseURL}/contacts`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
 
   // BLOCKED
 
