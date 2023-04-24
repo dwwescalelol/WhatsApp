@@ -1,28 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FlatList } from 'react-native';
 import ContactListItem from '../components/ContactListItem';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
 
 const ContactsScreen = () => {
-  const store = useStore();
+  const contacts = useStore((state) => state.contacts);
+  const setContacts = useStore((state) => state.setContacts);
+
   // const sortedChats = chats.sort((a, b) =>
   //   a.user.name.localeCompare(b.user.name)
   // );
 
   const getContacts = async () => {
     try {
-      const contacts = await ApiHandler.getContacts(store.token);
-      console.log(contacts);
-      return contacts;
+      const responce = await ApiHandler.getContacts();
+      setContacts(responce);
     } catch (error) {}
   };
 
+  useEffect(() => {
+    getContacts();
+  }, []);
+
   return (
     <FlatList
-      data={getContacts()}
-      renderItem={({ item }) => <ContactListItem user={item.user} />}
-      style={{ backgroundColor: 'white' }}
+      data={contacts}
+      renderItem={({ item }) => (
+        <ContactListItem
+          user={{
+            userId: item.user_id,
+            firstName: item.first_name,
+            lastName: item.last_name,
+            email: item.email,
+          }}
+        />
+      )}
+      style={{
+        flex: 1,
+        backgroundColor: 'white',
+      }}
     />
   );
 };

@@ -64,6 +64,28 @@ const ApiWrapper = {
     });
   },
 
+  addContact: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}/contact`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
+  removeContact: async (token, userId) => {
+    return await fetch(`${baseURL}/user/${userId}/contact`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
   // LOGIN
   login: async (email, password) => {
     return await fetch(`${baseURL}/login`, {

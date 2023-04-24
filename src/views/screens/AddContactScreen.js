@@ -6,7 +6,7 @@ import { useStore } from '../../stores/AppStore';
 import ContactListItem from '../components/ContactListItem';
 import ErrorMessage from '../components/ErrorMessage';
 
-const SearchScreen = () => {
+const AddContactScreen = () => {
   const store = useStore();
 
   const [searchText, setSearchText] = useState('');
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default AddContactScreen;

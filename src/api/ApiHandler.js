@@ -21,7 +21,8 @@ const ApiHandler = {
   },
 
   getUserInfo: async (token, userId) => {
-    const response = await ApiWrapper.getUserInfo(token, userId);
+    const store = useStore.getState();
+    const response = await ApiWrapper.getUserInfo(store.token, userId);
     if (response.status == 200) return response.json();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 404) throw new Error('User cannot be found.');
@@ -70,6 +71,36 @@ const ApiHandler = {
     if (response.status === 401) throw new Error('Not authorized to upload.');
     if (response.status == 403) throw new Error('Forbidden.');
     if (response.status === 404) throw new Error('User cannot be found.');
+    if (response.status === 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  addContact: async (userId) => {
+    const store = useStore.getState();
+
+    const response = await ApiWrapper.addContact(store.token, userId);
+    if (response.status === 200) {
+      store.addContact(await ApiHandler.getUserInfo(store.token, userId));
+      return;
+    }
+    if (response.status === 401)
+      throw new Error('Not authorized to add contact.');
+    if (response.status === 403) throw new Error('Forbidden.');
+    if (response.status === 404) throw new Error('User not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  removeContact: async (userId) => {
+    const store = useStore.getState();
+    const response = await ApiWrapper.removeContact(store.token, userId);
+    if (response.status === 200) {
+      store.removeContact(userId);
+      return response.text();
+    }
+    if (response.status === 401)
+      throw new Error('Not authorized to remove contact.');
+    if (response.status === 404) throw new Error('Contact not found.');
     if (response.status === 500) throw new Error('Server error...');
     throw new Error('An unexpected error occurred.');
   },
@@ -127,8 +158,9 @@ const ApiHandler = {
   },
 
   // CONTACTS
-  getContacts: async (token) => {
-    const response = await ApiWrapper.getContacts(token);
+  getContacts: async () => {
+    const store = useStore.getState();
+    const response = await ApiWrapper.getContacts(store.token);
     if (response.status == 200) return response.json();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 500) throw new Error('Server error...');

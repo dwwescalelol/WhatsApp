@@ -2,9 +2,25 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
-const Button = ({ label, onPress, invert, style }) => {
-  const buttonStyle = invert ? styles.invertedButton : styles.normalButton;
-  const textStyle = invert ? styles.invertedText : styles.normalText;
+const Button = ({ label, onPress, invert, style, color = '#25D366' }) => {
+  const dynamicStyle = StyleSheet.create({
+    normalButton: {
+      backgroundColor: color,
+    },
+    invertedText: {
+      color: color,
+    },
+    invertedButton: {
+      borderWidth: 1,
+      backgroundColor: '#fff',
+      borderColor: color,
+    },
+  });
+
+  const buttonStyle = invert
+    ? dynamicStyle.invertedButton
+    : dynamicStyle.normalButton;
+  const textStyle = invert ? dynamicStyle.invertedText : styles.normalText;
 
   return (
     <TouchableOpacity
@@ -21,6 +37,7 @@ Button.propTypes = {
   onPress: PropTypes.func,
   invert: PropTypes.bool,
   style: PropTypes.object,
+  color: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
@@ -29,14 +46,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: '80%',
   },
-  normalButton: {
-    backgroundColor: '#25D366',
-  },
-  invertedButton: {
-    borderWidth: 1,
-    backgroundColor: '#fff',
-    borderColor: '#25D366',
-  },
   text: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -44,9 +53,6 @@ const styles = StyleSheet.create({
   },
   normalText: {
     color: '#fff',
-  },
-  invertedText: {
-    color: '#25D366',
   },
 });
 

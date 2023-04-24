@@ -31,4 +31,14 @@ export const useStore = create((set, get) => ({
       email: null,
       token: null,
     }),
+
+  contacts: [],
+
+  setContacts: (contacts) => set({ contacts }),
+  addContact: (contact) =>
+    set((state) => ({ contacts: [...state.contacts, contact] })),
+  removeContact: (userId) =>
+    set((state) => ({
+      contacts: state.contacts.filter((contact) => contact.user_id !== userId),
+    })),
 }));
