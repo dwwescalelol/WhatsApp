@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
 import NotImplementedScreen from '../views/screens/NotImplementedScreen';
 import ChatsScreen from '../views/screens/ChatsScreen';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +11,8 @@ import IconButton from '../views/components/IconButton';
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
+  const navigation = useNavigation();
+
   return (
     <Tab.Navigator
       initialRouteName="Contacts"
@@ -25,7 +28,12 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people-outline" size={size} color={color} />
           ),
-          headerRight: () => <IconButton iconName={'person-add-outline'} />,
+          headerRight: () => (
+            <IconButton
+              iconName={'person-add-outline'}
+              onPress={() => navigation.navigate('Search')}
+            />
+          ),
           tabBarLabel: () => null,
         }}
       />
