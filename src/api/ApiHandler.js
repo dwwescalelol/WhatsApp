@@ -193,6 +193,18 @@ const ApiHandler = {
     if (response.status == 500) throw new Error('Server error...');
     throw new Error('An unexpected error occurred.');
   },
+
+  // BLOCKED
+  getBlockedUsers: async (token) => {
+    const response = await ApiWrapper.getBlockedUsers(token);
+
+    if (response.status === 200) {
+      return await response.json();
+    }
+    if (response.status === 401) throw new Error('Not authorized to view.');
+    if (response.status === 500) throw new Error('Server error...');
+    throw new Error('An unexpected error occurred.');
+  },
 };
 
 export default ApiHandler;

@@ -16,8 +16,15 @@ const Profile = ({ user }) => {
 
   const checkIfContact = async () => {
     try {
-      const contacts = store.contacts;
-      return contacts.some((contact) => contact.user_id === user.userId);
+      return store.contacts.some((contact) => contact.user_id === user.userId);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const checkIfBlocked = async () => {
+    try {
+      return store.blocked.some((contact) => contact.user_id === user.userId);
     } catch (error) {
       setError(error.message);
     }
@@ -25,6 +32,7 @@ const Profile = ({ user }) => {
 
   const updateContactState = async () => {
     setContact(await checkIfContact());
+    setBlocked(await checkIfBlocked());
   };
 
   const handleAddContact = async () => {
@@ -64,7 +72,12 @@ const Profile = ({ user }) => {
 
     try {
       await ApiHandler.blockUser(store.token, user.userId);
-      setBlocked(true);
+      store.addBlocked({
+        user_id: user.userId,
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+      });
     } catch (error) {
       setError(error.message);
     } finally {
@@ -78,7 +91,7 @@ const Profile = ({ user }) => {
 
     try {
       await ApiHandler.unblockUser(store.token, user.userId);
-      setBlocked(false);
+      store.removeBlocked(user.userId);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -108,37 +121,41 @@ const Profile = ({ user }) => {
       <View style={styles.separator} />
 
       <ErrorMessage message={error} />
-      {contact ? (
-        <Button
-          onPress={handleRemoveContact}
-          label="Remove Contact"
-          style={styles.button}
-          invert
-          color="red"
-        />
-      ) : (
-        <Button
-          onPress={handleAddContact}
-          label="Add Contact"
-          style={styles.button}
-          invert
-        />
-      )}
 
       {blocked ? (
         <Button
+          disable={submitted}
           onPress={handleUnblock}
           label="Unblock"
           style={styles.button}
           color="red"
           invert
         />
+      ) : contact ? (
+        <>
+          <Button
+            disable={submitted}
+            onPress={handleRemoveContact}
+            label="Remove Contact"
+            style={styles.button}
+            invert
+            color="red"
+          />
+          <Button
+            disable={submitted}
+            onPress={handleBlock}
+            label="Block"
+            style={styles.button}
+            color="red"
+          />
+        </>
       ) : (
         <Button
-          onPress={handleBlock}
-          label="Block"
+          disable={submitted}
+          onPress={handleAddContact}
+          label="Add Contact"
           style={styles.button}
-          color="red"
+          invert
         />
       )}
     </View>

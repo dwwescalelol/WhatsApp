@@ -164,6 +164,16 @@ const ApiWrapper = {
   },
 
   // BLOCKED
+  getBlockedUsers: async (token) => {
+    return await fetch(`${baseURL}/blocked`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
 
   // CHAT
 };

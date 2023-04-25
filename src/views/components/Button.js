@@ -2,7 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
-const Button = ({ label, onPress, invert, style, color = '#25D366' }) => {
+const Button = ({
+  label,
+  onPress,
+  invert,
+  style,
+  color = '#25D366',
+  disable,
+}) => {
   const dynamicStyle = StyleSheet.create({
     normalButton: {
       backgroundColor: color,
@@ -26,6 +33,7 @@ const Button = ({ label, onPress, invert, style, color = '#25D366' }) => {
     <TouchableOpacity
       style={[styles.button, buttonStyle, style]}
       onPress={onPress}
+      disabled={disable}
     >
       <Text style={[styles.text, textStyle]}>{label}</Text>
     </TouchableOpacity>
@@ -38,6 +46,7 @@ Button.propTypes = {
   invert: PropTypes.bool,
   style: PropTypes.object,
   color: PropTypes.string,
+  disable: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ApiWrapper from './src/api/ApiWrapper';
 import { useStore } from './src/stores/AppStore';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import LoginNavigator from './src/navigation/LoginNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import MainStackNavigator from './src/navigation/MainStackNavigator';
+import ApiHandler from './src/api/ApiHandler';
 
 export default function App() {
   const store = useStore();
@@ -23,13 +23,14 @@ export default function App() {
     }
 
     if (store.token) {
-      const responce = await ApiWrapper.getUserInfo(store.token, store.userId);
-      if (responce.status == 200) {
-        const userInfo = await responce.json();
-        await store.setFirstName(userInfo.first_name);
-        await store.setLastName(userInfo.last_name);
-        await store.setEmail(userInfo.email);
-      }
+      const userInfo = await ApiHandler.getUserInfo(store.token, store.userId);
+      const contacts = await ApiHandler.getContacts();
+      const blocked = await ApiHandler.getBlockedUsers(store.token);
+      await store.setFirstName(userInfo.first_name);
+      await store.setLastName(userInfo.last_name);
+      await store.setEmail(userInfo.email);
+      await store.setBlocked(blocked);
+      await store.setContacts(contacts);
     }
   };
 

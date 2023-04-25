@@ -41,4 +41,14 @@ export const useStore = create((set, get) => ({
     set((state) => ({
       contacts: state.contacts.filter((contact) => contact.user_id !== userId),
     })),
+
+  blocked: [],
+
+  setBlocked: (blocked) => set({ blocked }),
+  addBlocked: (blocked) =>
+    set((state) => ({ blocked: [...state.blocked, blocked] })),
+  removeBlocked: (userId) =>
+    set((state) => ({
+      blocked: state.blocked.filter((blocked) => blocked.user_id !== userId),
+    })),
 }));
