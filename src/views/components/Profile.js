@@ -40,7 +40,8 @@ const Profile = ({ user }) => {
     setError('');
 
     try {
-      await ApiHandler.addContact(user.userId);
+      await ApiHandler.addContact(store.token, user.userId);
+      store.addContact(await ApiHandler.getUserInfo(store.token, user.userId));
     } catch (error) {
       setError(error.message);
     } finally {
@@ -57,7 +58,8 @@ const Profile = ({ user }) => {
     setError('');
 
     try {
-      await ApiHandler.removeContact(user.userId);
+      await ApiHandler.removeContact(store.token, user.userId);
+      store.removeContact(user.userId);
     } catch (error) {
       console.log(error);
       setError(error.message);

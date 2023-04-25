@@ -7,12 +7,15 @@ import emailValidator from 'email-validator';
 import ErrorMessage from '../components/ErrorMessage';
 import ApiHandler from '../../api/ApiHandler';
 import Button from '../components/Button';
+import { useStore } from '../../stores/AppStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitted, setSubmitted] = useState('');
+  const store = useStore();
 
   const navigation = useNavigation();
 
@@ -27,7 +30,13 @@ const LoginScreen = () => {
 
     setSubmitted(true);
     try {
-      await ApiHandler.login(email, password);
+      const session = await ApiHandler.login(email, password);
+      await AsyncStorage.multiSet([
+        ['userId', session.id],
+        ['token', session.token],
+      ]);
+      await store.setUserId(session.id);
+      await store.setToken(session.token);
     } catch (error) {
       setError(error.message);
     } finally {

@@ -7,6 +7,7 @@ import { useStore } from '../../stores/AppStore';
 const ContactsScreen = () => {
   const contacts = useStore((state) => state.contacts);
   const setContacts = useStore((state) => state.setContacts);
+  const token = useStore((state) => state.token);
 
   // const sortedChats = chats.sort((a, b) =>
   //   a.user.name.localeCompare(b.user.name)
@@ -14,7 +15,7 @@ const ContactsScreen = () => {
 
   const getContacts = async () => {
     try {
-      const responce = await ApiHandler.getContacts();
+      const responce = await ApiHandler.getContacts(token);
       setContacts(responce);
     } catch (error) {}
   };

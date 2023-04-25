@@ -6,6 +6,7 @@ import SucsessMessage from '../components/SucsessMessage';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import EditableProfile from '../components/EditableProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SettingScreen = () => {
   const store = useStore();
@@ -21,7 +22,9 @@ const SettingScreen = () => {
 
     setSubmitted(true);
     try {
-      await ApiHandler.logout();
+      await ApiHandler.logout(store.token);
+      await AsyncStorage.clear();
+      await store.clearAll();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -54,6 +57,11 @@ const SettingScreen = () => {
       }
 
       await ApiHandler.updateUserInfo(store.token, store.userId, userData);
+      await store.updateUserInfo(
+        changedUserInfo.firstName,
+        changedUserInfo.lastName,
+        changedUserInfo.email
+      );
       setSucsess('Details sucsessfully updated!');
     } catch (error) {
       setError(error.message);

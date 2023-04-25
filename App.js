@@ -24,7 +24,7 @@ export default function App() {
 
     if (store.token) {
       const userInfo = await ApiHandler.getUserInfo(store.token, store.userId);
-      const contacts = await ApiHandler.getContacts();
+      const contacts = await ApiHandler.getContacts(store.token);
       const blocked = await ApiHandler.getBlockedUsers(store.token);
       await store.setFirstName(userInfo.first_name);
       await store.setLastName(userInfo.last_name);

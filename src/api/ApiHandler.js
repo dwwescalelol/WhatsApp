@@ -6,6 +6,7 @@ import { useStore } from '../stores/AppStore';
 const ApiHandler = {
   // USER
   signUp: async (firstName, lastName, email, password) => {
+    const store = useStore.getState();
     const response = await ApiWrapper.register(
       firstName,
       lastName,
@@ -13,7 +14,13 @@ const ApiHandler = {
       password
     );
     if (response.status == 201) {
-      ApiHandler.login(email, password);
+      const session = await ApiHandler.login(email, password);
+      await AsyncStorage.multiSet([
+        ['userId', session.id],
+        ['token', session.token],
+      ]);
+      await store.setUserId(session.id);
+      await store.setToken(session.token);
     }
     if (!response.ok) {
       throw new Error(await response.text());
@@ -21,8 +28,7 @@ const ApiHandler = {
   },
 
   getUserInfo: async (token, userId) => {
-    const store = useStore.getState();
-    const response = await ApiWrapper.getUserInfo(store.token, userId);
+    const response = await ApiWrapper.getUserInfo(token, userId);
     if (response.status == 200) return response.json();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 404) throw new Error('User cannot be found.');
@@ -30,8 +36,6 @@ const ApiHandler = {
   },
 
   updateUserInfo: async (token, userId, data) => {
-    const store = useStore.getState();
-
     const { firstName, lastName, email, password } = data;
     const response = await ApiWrapper.updateUserInfo(token, userId, {
       first_name: firstName,
@@ -39,10 +43,7 @@ const ApiHandler = {
       email,
       password,
     });
-    if (response.status == 200) {
-      await store.updateUserInfo(firstName, lastName, email);
-      return response.text();
-    }
+    if (response.status == 200) return response.text();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 403) throw new Error('Forbidden.');
     if (response.status == 404) throw new Error('User cannot be found.');
@@ -75,14 +76,13 @@ const ApiHandler = {
     throw new Error('An unexpected error occurred.');
   },
 
-  addContact: async (userId) => {
-    const store = useStore.getState();
-
-    const response = await ApiWrapper.addContact(store.token, userId);
+  addContact: async (token, userId) => {
+    const response = await ApiWrapper.addContact(token, userId);
     if (response.status === 200) {
-      store.addContact(await ApiHandler.getUserInfo(store.token, userId));
       return;
     }
+    if (response.status === 400)
+      throw new Error('Cannot add yourself as a contact.');
     if (response.status === 401)
       throw new Error('Not authorized to add contact.');
     if (response.status === 403) throw new Error('Forbidden.');
@@ -91,13 +91,13 @@ const ApiHandler = {
     throw new Error('An unexpected error occurred.');
   },
 
-  removeContact: async (userId) => {
-    const store = useStore.getState();
-    const response = await ApiWrapper.removeContact(store.token, userId);
+  removeContact: async (token, userId) => {
+    const response = await ApiWrapper.removeContact(token, userId);
     if (response.status === 200) {
-      store.removeContact(userId);
       return response.text();
     }
+    if (response.status === 400)
+      throw new Error('Cannot remove yourself as a contact.');
     if (response.status === 401)
       throw new Error('Not authorized to remove contact.');
     if (response.status === 404) throw new Error('Contact not found.');
@@ -134,30 +134,16 @@ const ApiHandler = {
 
   // LOGIN
   login: async (email, password) => {
-    const store = useStore.getState();
-
     const response = await ApiWrapper.login(email, password);
-    if (response.status === 200) {
-      const sessionInfo = await response.json();
-      await AsyncStorage.multiSet([
-        ['userId', sessionInfo.id],
-        ['token', sessionInfo.token],
-      ]);
-      await store.setUserId(sessionInfo.id);
-      await store.setToken(sessionInfo.token);
-    }
+    if (response.status === 200) return await response.json();
     if (!response.ok) {
       throw new Error(await response.text());
     }
   },
 
   // LOGOUT
-  logout: async () => {
-    const store = useStore.getState();
-
-    const response = await ApiWrapper.logout(store.token);
-    await AsyncStorage.clear();
-    await store.clearAll();
+  logout: async (token) => {
+    const response = await ApiWrapper.logout(token);
     if (!response.ok) {
       throw new Error(await response.text());
     }
@@ -185,9 +171,8 @@ const ApiHandler = {
   },
 
   // CONTACTS
-  getContacts: async () => {
-    const store = useStore.getState();
-    const response = await ApiWrapper.getContacts(store.token);
+  getContacts: async (token) => {
+    const response = await ApiWrapper.getContacts(token);
     if (response.status == 200) return response.json();
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 500) throw new Error('Server error...');
@@ -197,7 +182,6 @@ const ApiHandler = {
   // BLOCKED
   getBlockedUsers: async (token) => {
     const response = await ApiWrapper.getBlockedUsers(token);
-
     if (response.status === 200) {
       return await response.json();
     }
