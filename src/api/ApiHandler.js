@@ -44,6 +44,7 @@ const ApiHandler = {
       password,
     });
     if (response.status == 200) return response.text();
+    if (response.status == 400) throw new Error('Email already registered.');
     if (response.status == 401) throw new Error('Not authorised to view.');
     if (response.status == 403) throw new Error('Forbidden.');
     if (response.status == 404) throw new Error('User cannot be found.');
