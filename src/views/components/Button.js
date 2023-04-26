@@ -51,6 +51,7 @@ Button.propTypes = {
 
 const styles = StyleSheet.create({
   button: {
+    marginTop: 10,
     padding: 10,
     borderRadius: 5,
     width: '80%',

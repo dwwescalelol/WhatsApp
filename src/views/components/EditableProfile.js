@@ -67,11 +67,11 @@ const EditableProfile = () => {
       <View style={styles.separator} />
       <SucsessMessage message={success} />
       <ErrorMessage message={error} />
+
       <Button
         label="Confirm Changes"
         onPress={handleConfirmChanges}
         disabled={submitted}
-        style={{ margin: 10 }}
         invert
       />
     </View>

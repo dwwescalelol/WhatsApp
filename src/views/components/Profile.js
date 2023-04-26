@@ -37,7 +37,6 @@ const Profile = ({ user }) => {
           disable={contactHook.submitted}
           onPress={contactHook.handleUnblock}
           label="Unblock"
-          style={styles.button}
           color="red"
           invert
         />
@@ -47,7 +46,6 @@ const Profile = ({ user }) => {
             disable={contactHook.submitted}
             onPress={contactHook.handleRemoveContact}
             label="Remove Contact"
-            style={styles.button}
             invert
             color="red"
           />
@@ -55,7 +53,6 @@ const Profile = ({ user }) => {
             disable={contactHook.submitted}
             onPress={contactHook.handleBlock}
             label="Block"
-            style={styles.button}
             color="red"
           />
         </>
@@ -64,7 +61,6 @@ const Profile = ({ user }) => {
           disable={contactHook.submitted}
           onPress={contactHook.handleAddContact}
           label="Add Contact"
-          style={styles.button}
           invert
         />
       )}
@@ -100,9 +96,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
-  },
-  button: {
-    marginTop: 10,
   },
 });
 
