@@ -1,105 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Avatar from './Avatar';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import Button from './Button';
-import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from './ErrorMessage';
-import { useStore } from '../../stores/AppStore';
+import { useContactActions } from '../../hooks/useContactActions';
 
 const Profile = ({ user }) => {
-  const store = useStore();
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
-  const [contact, setContact] = useState('');
-  const [blocked, setBlocked] = useState('');
-
-  const checkIfContact = async () => {
-    try {
-      return store.contacts.some((contact) => contact.user_id === user.userId);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const checkIfBlocked = async () => {
-    try {
-      return store.blocked.some((contact) => contact.user_id === user.userId);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const updateContactState = async () => {
-    setContact(await checkIfContact());
-    setBlocked(await checkIfBlocked());
-  };
-
-  const handleAddContact = async () => {
-    setSubmitted(true);
-    setError('');
-
-    try {
-      await ApiHandler.addContact(store.token, user.userId);
-      store.addContact(await ApiHandler.getUserInfo(store.token, user.userId));
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
-
-  useEffect(() => {
-    updateContactState();
-  }, [submitted]);
-
-  const handleRemoveContact = async () => {
-    setSubmitted(true);
-    setError('');
-
-    try {
-      await ApiHandler.removeContact(store.token, user.userId);
-      store.removeContact(user.userId);
-    } catch (error) {
-      console.log(error);
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
-
-  const handleBlock = async () => {
-    setSubmitted(true);
-    setError('');
-
-    try {
-      await ApiHandler.blockUser(store.token, user.userId);
-      store.addBlocked({
-        user_id: user.userId,
-        first_name: user.firstName,
-        last_name: user.lastName,
-        email: user.email,
-      });
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
-
-  const handleUnblock = async () => {
-    setSubmitted(true);
-    setError('');
-
-    try {
-      await ApiHandler.unblockUser(store.token, user.userId);
-      store.removeBlocked(user.userId);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
+  const contactHook = useContactActions(user);
 
   return (
     <View style={styles.container}>
@@ -122,30 +30,30 @@ const Profile = ({ user }) => {
 
       <View style={styles.separator} />
 
-      <ErrorMessage message={error} />
+      <ErrorMessage message={contactHook.error} />
 
-      {blocked ? (
+      {contactHook.blocked ? (
         <Button
-          disable={submitted}
-          onPress={handleUnblock}
+          disable={contactHook.submitted}
+          onPress={contactHook.handleUnblock}
           label="Unblock"
           style={styles.button}
           color="red"
           invert
         />
-      ) : contact ? (
+      ) : contactHook.contact ? (
         <>
           <Button
-            disable={submitted}
-            onPress={handleRemoveContact}
+            disable={contactHook.submitted}
+            onPress={contactHook.handleRemoveContact}
             label="Remove Contact"
             style={styles.button}
             invert
             color="red"
           />
           <Button
-            disable={submitted}
-            onPress={handleBlock}
+            disable={contactHook.submitted}
+            onPress={contactHook.handleBlock}
             label="Block"
             style={styles.button}
             color="red"
@@ -153,8 +61,8 @@ const Profile = ({ user }) => {
         </>
       ) : (
         <Button
-          disable={submitted}
-          onPress={handleAddContact}
+          disable={contactHook.submitted}
+          onPress={contactHook.handleAddContact}
           label="Add Contact"
           style={styles.button}
           invert

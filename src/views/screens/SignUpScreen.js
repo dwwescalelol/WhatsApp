@@ -1,45 +1,31 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import InputField from '../components/InputField';
-import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from '../components/ErrorMessage';
 import Validate from '../../utilities/ValidateFields';
 import Button from '../components/Button';
+import { useSignUp } from '../../hooks/useSignUp';
 
 // TODO: handel aria-label for text inputs, cahnge handelSignUp to do onblur of all fields, maybe change button red
 
 const SignUpScreen = () => {
-  const [error, setError] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [submitted, setSubmitted] = useState('');
-
-  const navigation = useNavigation();
-
-  const handleSignUp = async () => {
-    setError('');
-
-    if (
-      Validate.signUp(firstName, lastName, email, password, confirmPassword)
-    ) {
-      setError('Make sure all fields are valid.');
-      return;
-    }
-
-    setSubmitted(true);
-    try {
-      await ApiHandler.signUp(firstName, lastName, email, password);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+    submitted,
+    error,
+    setFirstName,
+    setLastName,
+    setEmail,
+    setPassword,
+    setConfirmPassword,
+    handleSignUp,
+    navigateLogIn,
+  } = useSignUp();
 
   return (
     <View style={styles.container}>
@@ -53,6 +39,7 @@ const SignUpScreen = () => {
         errorMessage={Validate.name(firstName)}
         placeholder="First Name"
       />
+
       {/* Last name*/}
       <InputField
         value={lastName}
@@ -60,6 +47,7 @@ const SignUpScreen = () => {
         errorMessage={Validate.name(lastName)}
         placeholder="Last Name"
       />
+
       {/* Email */}
       <InputField
         value={email}
@@ -67,6 +55,7 @@ const SignUpScreen = () => {
         errorMessage={Validate.email(email)}
         placeholder="Email Adress"
       />
+
       {/* Password */}
       <InputField
         value={password}
@@ -75,6 +64,7 @@ const SignUpScreen = () => {
         errorMessage={Validate.password(password)}
         placeholder="Password"
       />
+
       {/* Confirm Password */}
       <InputField
         isPassword={true}
@@ -84,17 +74,16 @@ const SignUpScreen = () => {
         placeholder="Current Password"
       />
 
+      <ErrorMessage message={error} />
       {/* Signup Button */}
       <Button label="SIGN UP" onPress={handleSignUp} disabled={submitted} />
-
-      <ErrorMessage message={error} />
-      <Text>Already have an account?</Text>
 
       {/* LogIn Button */}
       <Button
         label="LOG IN"
-        onPress={() => navigation.navigate('LogIn')}
+        onPress={navigateLogIn}
         invert
+        disabled={submitted}
       />
     </View>
   );

@@ -1,25 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Image } from 'react-native';
-import ApiHandler from '../../api/ApiHandler';
-import { useStore } from '../../stores/AppStore';
+import { useAvatar } from '../../hooks/useAvatar';
 
 const Avatar = ({ userId, uri = null, style }) => {
-  const [avatarUri, setAvatarUri] = useState('');
-  const store = useStore();
-
-  const getUserProfile = async () => {
-    try {
-      return await ApiHandler.getAvatar(store.token, userId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (userId && !uri) getUserProfile().then((uri) => setAvatarUri(uri));
-    else setAvatarUri(uri);
-  }, [userId, uri]);
+  const { avatarUri } = useAvatar(userId, uri);
 
   return (
     <Image

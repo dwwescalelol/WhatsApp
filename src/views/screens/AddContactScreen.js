@@ -1,35 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, FlatList } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, FlatList } from 'react-native';
 import InputField from '../components/InputField';
-import ApiHandler from '../../api/ApiHandler';
-import { useStore } from '../../stores/AppStore';
+import { useAddContact } from '../../hooks/useAddContact';
 import ContactListItem from '../components/ContactListItem';
 import ErrorMessage from '../components/ErrorMessage';
 
 const AddContactScreen = () => {
-  const store = useStore();
-
-  const [searchText, setSearchText] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [error, setError] = useState('');
-
-  const searchUsers = async (query) => {
-    try {
-      const results = await ApiHandler.searchUsers(store.token, query);
-      setSearchResults(results.filter((user) => user.user_id != store.userId));
-    } catch (error) {
-      setError('Error searching users:', error);
-      setSearchResults([]);
-    }
-  };
-
-  useEffect(() => {
-    if (searchText.length > 0) {
-      searchUsers(searchText);
-    } else {
-      setSearchResults([]);
-    }
-  }, [searchText]);
+  const { searchText, searchResults, error, setSearchText } = useAddContact();
 
   return (
     <View style={styles.container}>

@@ -1,76 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import ApiHandler from '../../api/ApiHandler';
-import { useStore } from '../../stores/AppStore';
+import { useEditProfile } from '../../hooks/useEditProfile';
+import ErrorMessage from '../components/ErrorMessage';
+import SucsessMessage from '../components/SucsessMessage';
 import Avatar from './Avatar';
 import InputField from './InputField';
+import Button from '../components/Button';
 import Validate from '../../utilities/ValidateFields';
 
-const EditableProfile = ({ onUpdate, onAvatarUpdate }) => {
-  const store = useStore();
-  const userId = store.userId;
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [avatar, setAvatar] = useState(null);
-
-  const getUserData = async (userId) => {
-    try {
-      const response = await ApiHandler.getUserInfo(store.token, userId);
-
-      return {
-        firstName: response.first_name,
-        lastName: response.last_name,
-        email: response.email,
-      };
-    } catch (error) {
-      return {
-        firstName: error.message,
-        lastName: 'hello',
-        email: 'hello',
-      };
-    }
-  };
-
-  // set properties
-  useEffect(() => {
-    getUserData(userId).then((userData) => {
-      setFirstName(userData.firstName || '');
-      setLastName(userData.lastName || '');
-      setEmail(userData.email || '');
-    });
-  }, [userId]);
-
-  // passup properties
-  useEffect(() => {
-    onUpdate(firstName, lastName, email);
-  }, [firstName, lastName, email]);
-
-  useEffect(() => {
-    if (avatar) onAvatarUpdate(avatar);
-  }, [avatar]);
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (result.canceled === false) {
-      const { assets } = result;
-      const uri = assets[0].uri;
-      setAvatar(uri);
-    }
-  };
+const EditableProfile = () => {
+  const {
+    userId,
+    firstName,
+    lastName,
+    email,
+    avatar,
+    submitted,
+    error,
+    success,
+    setFirstName,
+    setLastName,
+    setEmail,
+    pickImage,
+    handleConfirmChanges,
+  } = useEditProfile();
 
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={pickImage}>
-        {avatar ? <Avatar uri={avatar} /> : <Avatar userId={store.userId} />}
+        {avatar ? <Avatar uri={avatar} /> : <Avatar userId={userId} />}
       </TouchableOpacity>
 
       {/* first and last name */}
@@ -106,6 +65,15 @@ const EditableProfile = ({ onUpdate, onAvatarUpdate }) => {
       </View>
 
       <View style={styles.separator} />
+      <SucsessMessage message={success} />
+      <ErrorMessage message={error} />
+      <Button
+        label="Confirm Changes"
+        onPress={handleConfirmChanges}
+        disabled={submitted}
+        style={{ margin: 10 }}
+        invert
+      />
     </View>
   );
 };

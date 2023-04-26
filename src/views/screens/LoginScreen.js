@@ -1,53 +1,22 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useLogin } from '../../hooks/useLogin';
 import InputField from '../components/InputField';
-import emailValidator from 'email-validator';
 import ErrorMessage from '../components/ErrorMessage';
-import ApiHandler from '../../api/ApiHandler';
 import Button from '../components/Button';
-import { useStore } from '../../stores/AppStore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = () => {
-  const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [submitted, setSubmitted] = useState('');
-  const store = useStore();
-
-  const navigation = useNavigation();
-
-  const handleLogin = async () => {
-    setError('');
-
-    const isValidEmail = validateEmail(email);
-    if (isValidEmail) {
-      setError(isValidEmail);
-      return;
-    }
-
-    setSubmitted(true);
-    try {
-      const session = await ApiHandler.login(email, password);
-      await AsyncStorage.multiSet([
-        ['userId', session.id],
-        ['token', session.token],
-      ]);
-      await store.setUserId(session.id);
-      await store.setToken(session.token);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setSubmitted(false);
-    }
-  };
-
-  const validateEmail = (email) => {
-    if (!emailValidator.validate(email)) return 'Must enter a valid email.';
-    return null;
-  };
+  const {
+    email,
+    password,
+    submitted,
+    error,
+    setEmail,
+    setPassword,
+    handleLogin,
+    navigateSignUp,
+  } = useLogin();
 
   return (
     <View style={styles.container}>
@@ -58,7 +27,7 @@ const LoginScreen = () => {
       <InputField
         value={email}
         onChangeText={setEmail}
-        placeholder="Email Adress"
+        placeholder="Email Address"
       />
 
       {/* Password */}
@@ -70,15 +39,14 @@ const LoginScreen = () => {
       />
 
       {/* Login Button */}
-      <Button label="LOG IN" onPress={handleLogin} disabled={submitted} />
-
       <ErrorMessage message={error} />
-      <Text>Dont have an account?</Text>
+      <Button label="LOG IN" onPress={handleLogin} disable={submitted} />
 
       {/* Signup Button */}
       <Button
         label="SIGN UP"
-        onPress={() => navigation.navigate('SignUp')}
+        onPress={navigateSignUp}
+        disable={submitted}
         invert
       />
     </View>
