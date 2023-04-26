@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const Switch = ({ label, value, onValueChange }) => {
+const Switch = ({ label, value, onValueChange, color = '#4caf50' }) => {
   const handlePress = () => {
     onValueChange(!value);
   };
@@ -11,11 +11,22 @@ const Switch = ({ label, value, onValueChange }) => {
     <TouchableOpacity
       style={[
         styles.switchContainer,
-        value ? styles.switchActive : styles.switchInactive,
+        value
+          ? { backgroundColor: color, paddingVertical: 11 }
+          : {
+              backgroundColor: 'white',
+              borderColor: color,
+              borderBottomWidth: '1px',
+            },
+        {},
       ]}
       onPress={handlePress}
     >
-      <Text style={styles.label}>{label}</Text>
+      <Text
+        style={[styles.text, value ? { color: 'white' } : { color: color }]}
+      >
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -24,23 +35,22 @@ Switch.propTypes = {
   label: PropTypes.string,
   value: PropTypes.any,
   onValueChange: PropTypes.func,
+  color: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
   switchContainer: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 5,
-  },
-  switchActive: {
-    backgroundColor: '#4caf50',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    width: '100%',
   },
   switchInactive: {
     backgroundColor: '#c7c7c7',
   },
-  label: {
-    color: 'white',
+  text: {
     fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 
