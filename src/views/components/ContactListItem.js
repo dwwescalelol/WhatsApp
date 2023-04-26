@@ -30,7 +30,6 @@ const ContactListItem = ({ user }) => {
           <Text numberOfLines={1} style={styles.subTitle}>
             {user.email}
           </Text>
-
           <View style={styles.separator} />
         </View>
       </View>
@@ -47,13 +46,15 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     marginHorizontal: 10,
-    marginVertical: 5,
-    height: 40,
+    marginTop: 5,
+    height: 45,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   content: {
     flex: 1,
+    height: '100%',
+    justifyContent: 'space-between',
   },
   image: {
     width: 45,
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
   separator: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: 'lightgray',
-    marginTop: 5,
   },
 });
 
