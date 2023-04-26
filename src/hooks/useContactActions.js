@@ -82,6 +82,7 @@ export const useContactActions = (user) => {
         last_name: user.lastName,
         email: user.email,
       });
+      store.removeContact(user.userId);
       setBlocked(true);
     } catch (error) {
       setError(error.message);
@@ -97,6 +98,12 @@ export const useContactActions = (user) => {
     try {
       await ApiHandler.unblockUser(store.token, user.userId);
       store.removeBlocked(user.userId);
+      store.addContact({
+        user_id: user.userId,
+        first_name: user.firstName,
+        last_name: user.lastName,
+        email: user.email,
+      });
       setBlocked(false);
     } catch (error) {
       setError(error.message);
