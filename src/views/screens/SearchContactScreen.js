@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import InputField from '../components/InputField';
 import { useAddContact } from '../../hooks/useAddContact';
-import ContactListItem from '../components/ContactListItem';
 import ErrorMessage from '../components/ErrorMessage';
+import ContactList from '../components/ContactList';
 
-const AddContactScreen = () => {
+const SearchContactScreen = () => {
   const { searchText, searchResults, error, setSearchText } = useAddContact();
 
   return (
@@ -19,20 +19,7 @@ const AddContactScreen = () => {
         <ErrorMessage message={error} />
       </View>
       <View>
-        <FlatList
-          data={searchResults}
-          renderItem={({ item }) => (
-            <ContactListItem
-              user={{
-                userId: item.user_id,
-                firstName: item.given_name,
-                lastName: item.family_name,
-                email: item.email,
-              }}
-            />
-          )}
-          style={styles.list}
-        />
+        <ContactList data={searchResults} />
       </View>
     </View>
   );
@@ -57,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddContactScreen;
+export default SearchContactScreen;

@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChatScreen from '../views/screens/ChatScreen';
 import ProfileScreen from '../views/screens/ProfileScreen';
 import MainTabNavigator from './MainTabNavigator';
-import AddContactScreen from '../views/screens/AddContactScreen';
+import SearchContactScreen from '../views/screens/SearchContactScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +23,7 @@ const MainStackNavigator = () => {
       />
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Search" component={AddContactScreen} />
+      <Stack.Screen name="Search" component={SearchContactScreen} />
     </Stack.Navigator>
   );
 };

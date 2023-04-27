@@ -5,17 +5,28 @@ import { Text, StyleSheet, Pressable, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Avatar from './Avatar';
 
-const ContactListItem = ({ user }) => {
+const ContactListItem = ({ user, onPress = null, selected = false }) => {
   const navigation = useNavigation();
+  const handlePress = () => {
+    if (onPress) {
+      onPress(user);
+    } else {
+      navigation.navigate('Profile', { user });
+    }
+  };
 
   return (
     <Pressable
-      onPress={() => navigation.navigate('Profile', { user })}
+      onPress={handlePress}
       style={({ pressed }) => [
         {
           flex: 1,
           width: '100%',
-          backgroundColor: pressed ? 'lightgray' : 'white',
+          backgroundColor: selected
+            ? 'lightblue'
+            : pressed
+            ? 'lightgray'
+            : 'white',
         },
       ]}
     >
@@ -39,6 +50,8 @@ const ContactListItem = ({ user }) => {
 
 ContactListItem.propTypes = {
   user: PropTypes.object,
+  onPress: PropTypes.func,
+  selected: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

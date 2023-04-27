@@ -1,46 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import ApiHandler from '../../api/ApiHandler';
-import { useStore } from '../../stores/AppStore';
+// ContactsScreen.js
+import React from 'react';
+import { View } from 'react-native';
 import Switch from '../components/Switch';
-import ContactListItem from '../components/ContactListItem';
+import ContactList from '../components/ContactList';
+import { useContacts } from '../../hooks/useContacts';
 
 const ContactsScreen = () => {
-  const store = useStore();
-  const [showBlockedContacts, setShowBlockedContacts] = useState(false);
-  const [activeSwitch, setActiveSwitch] = useState('contacts');
-
-  // const sortedChats = chats.sort((a, b) =>
-  //   a.user.name.localeCompare(b.user.name)
-  // );
-
-  const getContacts = async () => {
-    try {
-      const responce = await ApiHandler.getContacts(store.token);
-      store.setContacts(responce);
-    } catch (error) {}
-  };
-
-  const getBlockedUsers = async () => {
-    try {
-      const response = await ApiHandler.getBlockedUsers(store.token);
-      store.setBlocked(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (showBlockedContacts) {
-      getBlockedUsers();
-    } else {
-      getContacts();
-    }
-  }, [showBlockedContacts]);
-
-  useEffect(() => {
-    getContacts();
-  }, []);
+  const { error, showContacts, store, setShowContacts, handleSwitchChange } =
+    useContacts();
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -53,38 +20,27 @@ const ContactsScreen = () => {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Switch
             label="Contacts"
-            value={activeSwitch === 'contacts'}
-            onValueChange={() => setActiveSwitch('contacts')}
+            value={showContacts}
+            onValueChange={() => {
+              setShowContacts(true);
+              handleSwitchChange('contacts');
+            }}
           />
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Switch
             label="Blocked"
-            value={activeSwitch === 'blockedContacts'}
-            onValueChange={() => setActiveSwitch('blockedContacts')}
+            value={!showContacts}
+            onValueChange={() => {
+              setShowContacts(false);
+              handleSwitchChange('blocked');
+            }}
             color="red"
           />
         </View>
       </View>
 
-      <FlatList
-        data={
-          activeSwitch === 'blockedContacts' ? store.blocked : store.contacts
-        }
-        renderItem={({ item }) => (
-          <ContactListItem
-            user={{
-              userId: item.user_id,
-              firstName: item.first_name,
-              lastName: item.last_name,
-              email: item.email,
-            }}
-          />
-        )}
-        style={{
-          flex: 1,
-        }}
-      />
+      <ContactList data={showContacts ? store.contacts : store.blocked} />
     </View>
   );
 };
