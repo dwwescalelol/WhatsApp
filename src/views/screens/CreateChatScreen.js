@@ -7,6 +7,7 @@ import InputField from '../components/InputField';
 import Button from '../components/Button';
 import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from '../components/ErrorMessage';
+import { useSearchContact } from '../../hooks/useSearchContact';
 
 const CreateChatScreen = () => {
   const store = useStore();
@@ -28,7 +29,8 @@ const CreateChatScreen = () => {
       setSelectedUsers([...selectedUsers, user]);
     }
   };
-
+  const { searchText, searchResults, searchError, setSearchText } =
+    useSearchContact({ searchIn: 'contacts' });
   const handleCreateChat = async () => {
     setError('');
     setSubmitted(true);
@@ -75,13 +77,13 @@ const CreateChatScreen = () => {
           disable={submitted}
         />
         <InputField
-          value={search}
-          onChangeText={setSearch}
+          value={searchText}
+          onChangeText={setSearchText}
           placeholder="Search"
         />
       </View>
       <ContactList
-        data={store.contacts}
+        data={searchResults.length == 0 ? store.contacts : searchResults}
         onItemPress={handleItemPress}
         selectedItems={selectedUsers}
       />

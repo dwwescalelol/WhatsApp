@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import InputField from '../components/InputField';
-import { useAddContact } from '../../hooks/useAddContact';
+import { useSearchContact } from '../../hooks/useSearchContact';
 import ErrorMessage from '../components/ErrorMessage';
 import ContactList from '../components/ContactList';
 
 const SearchContactScreen = () => {
-  const { searchText, searchResults, error, setSearchText } = useAddContact();
+  const { searchText, searchResults, error, setSearchText } =
+    useSearchContact('all');
 
   return (
     <View style={styles.container}>

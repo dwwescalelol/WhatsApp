@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ApiHandler from '../api/ApiHandler';
 import { useStore } from '../stores/AppStore';
 
-export const useAddContact = () => {
+export const useSearchContact = ({ searchIn = 'all' }) => {
   const store = useStore();
 
   const [searchText, setSearchText] = useState('');
@@ -11,7 +11,12 @@ export const useAddContact = () => {
 
   const searchUsers = async (query) => {
     try {
-      const results = await ApiHandler.searchUsers(store.token, query);
+      console.log(searchIn);
+      const results = await ApiHandler.searchUsers(
+        store.token,
+        query,
+        searchIn
+      );
       setSearchResults(results.filter((user) => user.user_id != store.userId));
     } catch (error) {
       setError('Error searching users:', error);
