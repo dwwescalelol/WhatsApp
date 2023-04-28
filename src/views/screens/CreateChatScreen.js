@@ -42,16 +42,11 @@ const CreateChatScreen = () => {
           onChangeText={setChatName}
           placeholder="Chat Name"
         />
-        <ErrorMessage message={error} />
-        <Button
-          label="Create Chat"
-          onPress={handleCreateChat}
-          disable={submitted}
-        />
         <InputField
           value={searchText}
           onChangeText={setSearchText}
           placeholder="Search"
+          style={{ marginBottom: 10 }}
         />
         <ErrorMessage message={searchError} />
       </View>
@@ -62,6 +57,15 @@ const CreateChatScreen = () => {
         onItemPress={handleItemPress}
         selectedItems={selectedUsers}
       />
+      <View style={styles.buttons}>
+        <ErrorMessage message={error} />
+        <Button
+          label="Create Chat"
+          onPress={handleCreateChat}
+          disable={submitted}
+          style={{ marginBottom: 10 }}
+        />
+      </View>
     </View>
   );
 };
