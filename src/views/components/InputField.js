@@ -21,7 +21,7 @@ const InputField = ({
         placeholder={placeholder}
         secureTextEntry={isPassword}
         placeholderTextColor="grey"
-        value={value}
+        value={value || ''}
         onChangeText={onChangeText}
         onBlur={() => {
           setError(errorMessage);

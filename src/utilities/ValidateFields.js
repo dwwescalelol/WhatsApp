@@ -6,7 +6,7 @@ const passwordRegex =
 
 const Validate = {
   name: (name) => {
-    if (name.length < 2) return 'Must be atleast 2 charecters';
+    if (name?.length < 2) return 'Must be atleast 2 charecters';
     if (!alphabetRegex.test(name))
       return 'Name must consist of only alphabetical charecters';
     return null;
