@@ -11,7 +11,6 @@ export const useSearchUsers = ({ searchIn = 'all' }) => {
 
   const searchUsers = async (query) => {
     try {
-      console.log(searchIn);
       const results = await ApiHandler.searchUsers(
         store.token,
         query,
