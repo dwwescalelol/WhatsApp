@@ -7,7 +7,7 @@ import InputField from '../components/InputField';
 import Button from '../components/Button';
 import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from '../components/ErrorMessage';
-import { useSearchContact } from '../../hooks/useSearchContact';
+import { useSearchUsers } from '../../hooks/useSearchUsers';
 
 const CreateChatScreen = () => {
   const store = useStore();
@@ -16,7 +16,6 @@ const CreateChatScreen = () => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [chatName, setChatName] = useState('');
-  const [search, setSearch] = useState('');
 
   const handleItemPress = (user) => {
     const users = selectedUsers.find((item) => item.userId === user.userId);
@@ -81,6 +80,7 @@ const CreateChatScreen = () => {
           onChangeText={setSearchText}
           placeholder="Search"
         />
+        <ErrorMessage message={searchError} />
       </View>
       <ContactList
         data={searchResults.length == 0 ? store.contacts : searchResults}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ApiHandler from '../api/ApiHandler';
 import { useStore } from '../stores/AppStore';
 
-export const useSearchContact = ({ searchIn = 'all' }) => {
+export const useSearchUsers = ({ searchIn = 'all' }) => {
   const store = useStore();
 
   const [searchText, setSearchText] = useState('');
