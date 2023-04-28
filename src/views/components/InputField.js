@@ -46,11 +46,7 @@ InputField.propTypes = {
 const styles = StyleSheet.create({
   inputContainer: {
     width: '80%',
-    marginBottom: 10,
-  },
-  inputLabel: {
-    fontSize: 14,
-    marginBottom: 10,
+    marginTop: 10,
   },
   input: {
     borderWidth: 1,
