@@ -176,6 +176,77 @@ const ApiWrapper = {
   },
 
   // CHAT
+
+  getChats: async (token) => {
+    return await fetch(`${baseURL}/chat`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
+  createChat: async (token, name) => {
+    return await fetch(`${baseURL}/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+      body: JSON.stringify({ name }),
+    });
+  },
+
+  addUserToChat: async (token, chat_id, user_id) => {
+    return await fetch(`${baseURL}/chat/${chat_id}/user/${user_id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
+
+  getChatDetails: async (token, chat_id, limit = 20, offset = 0) => {
+    return await fetch(
+      `${baseURL}/chat/${chat_id}?limit=${limit}&offset=${offset}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-Authorization': token,
+        },
+      }
+    );
+  },
+
+  updateChat: async (token, chat_id, name) => {
+    return await fetch(`${baseURL}/chat/${chat_id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+      body: JSON.stringify({ name }),
+    });
+  },
+
+  removeUserFromChat: async (token, chat_id, user_id) => {
+    return await fetch(`${baseURL}/chat/${chat_id}/user/${user_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Authorization': token,
+      },
+    });
+  },
 };
 
 export default ApiWrapper;

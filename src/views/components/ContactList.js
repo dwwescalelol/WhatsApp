@@ -7,18 +7,24 @@ import PropTypes from 'prop-types';
 const ContactList = ({ data, onItemPress = null, selectedItems = [] }) => (
   <FlatList
     data={data}
-    renderItem={({ item }) => (
-      <ContactListItem
-        user={{
-          userId: item.user_id,
-          firstName: item.first_name ? item.first_name : item.given_name,
-          lastName: item.last_name ? item.last_name : item.family_name,
-          email: item.email,
-        }}
-        onPress={onItemPress}
-        selected={selectedItems?.includes(item.user_id)}
-      />
-    )}
+    renderItem={({ item }) => {
+      const user = {
+        userId: item.user_id,
+        firstName: item.first_name ? item.first_name : item.given_name,
+        lastName: item.last_name ? item.last_name : item.family_name,
+        email: item.email,
+      };
+
+      return (
+        <ContactListItem
+          user={user}
+          onPress={onItemPress}
+          selected={selectedItems.some(
+            (selectedUser) => selectedUser.userId === user.userId
+          )}
+        />
+      );
+    }}
     style={{
       flex: 1,
     }}

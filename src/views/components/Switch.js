@@ -16,7 +16,7 @@ const Switch = ({ label, value, onValueChange, color = '#4caf50' }) => {
           : {
               backgroundColor: 'white',
               borderColor: color,
-              borderBottomWidth: '1px',
+              borderBottomWidth: '2px',
             },
         {},
       ]}

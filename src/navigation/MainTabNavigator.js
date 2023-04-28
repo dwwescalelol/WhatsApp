@@ -54,7 +54,12 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles-outline" size={size} color={color} />
           ),
-          headerRight: () => <IconButton iconName={'ios-add-circle-outline'} />,
+          headerRight: () => (
+            <IconButton
+              iconName={'ios-add-circle-outline'}
+              onPress={() => navigation.navigate('CreateChat')}
+            />
+          ),
           tabBarLabel: () => null,
         }}
       />

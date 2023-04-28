@@ -190,6 +190,78 @@ const ApiHandler = {
     if (response.status === 500) throw new Error('Server error...');
     throw new Error('An unexpected error occurred.');
   },
+
+  // CHAT
+
+  getChats: async (token) => {
+    const response = await ApiWrapper.getChats(token);
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    }
+    if (response.status === 401)
+      throw new Error('Not authorized to view chats.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  createChat: async (token, name) => {
+    const response = await ApiWrapper.createChat(token, name);
+    if (response.status === 201) {
+      return await response.json();
+    }
+    if (response.status === 400) throw new Error('Bad request.');
+    if (response.status === 401)
+      throw new Error('Not authorized to create chat.');
+    if (response.status === 403) throw new Error('Forbidden.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  getChatDetails: async (token, chat_id, limit, offset) => {
+    const response = await ApiWrapper.getChatDetails(
+      token,
+      chat_id,
+      limit,
+      offset
+    );
+    if (response.status === 200) {
+      const data = await response.json();
+      return data;
+    }
+    if (response.status === 401)
+      throw new Error('Not authorized to view chat details.');
+    if (response.status === 404) throw new Error('Chat not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  updateChat: async (token, chat_id, name) => {
+    const response = await ApiWrapper.updateChat(token, chat_id, name);
+    if (response.status === 200) {
+      return;
+    }
+    if (response.status === 400) throw new Error('Bad request.');
+    if (response.status === 401)
+      throw new Error('Not authorized to update chat.');
+    if (response.status === 404) throw new Error('Chat not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  addUserToChat: async (token, chat_id, user_id) => {
+    const response = await ApiWrapper.addUserToChat(token, chat_id, user_id);
+    if (response.status === 200) {
+      return;
+    }
+    if (response.status === 400) throw new Error('Bad request.');
+    if (response.status === 401)
+      throw new Error('Not authorized to add user to chat.');
+    if (response.status === 403) throw new Error('Forbidden.');
+    if (response.status === 404) throw new Error('Chat or user not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
 };
 
 export default ApiHandler;
