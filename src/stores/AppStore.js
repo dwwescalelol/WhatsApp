@@ -51,4 +51,12 @@ export const useStore = create((set, get) => ({
     set((state) => ({
       blocked: state.blocked.filter((blocked) => blocked.user_id !== userId),
     })),
+
+  chats: [],
+  setChats: (chats) => set({ chats }),
+  addChat: (chat) => set((state) => ({ chats: [...state.chats, chat] })),
+  removeChat: (chatId) =>
+    set((state) => ({
+      chats: state.chats.filter((chat) => chat.chat_id !== chatId),
+    })),
 }));

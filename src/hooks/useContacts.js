@@ -1,4 +1,3 @@
-// useContacts.js
 import { useState, useEffect } from 'react';
 import ApiHandler from '../api/ApiHandler';
 import { useStore } from '../stores/AppStore';
@@ -8,6 +7,8 @@ export const useContacts = () => {
 
   const [error, setError] = useState('');
   const [showContacts, setShowContacts] = useState(true);
+  const contacts = store.contacts;
+  const blocked = store.blocked;
 
   const getContacts = async () => {
     setError('');
@@ -45,5 +46,12 @@ export const useContacts = () => {
     setShowContacts(value === 'contacts');
   };
 
-  return { error, showContacts, store, setShowContacts, handleSwitchChange };
+  return {
+    error,
+    showContacts,
+    contacts,
+    blocked,
+    setShowContacts,
+    handleSwitchChange,
+  };
 };

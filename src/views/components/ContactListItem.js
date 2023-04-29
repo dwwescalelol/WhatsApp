@@ -33,14 +33,16 @@ const ContactListItem = ({ user, onPress = null, selected = false }) => {
       <View style={styles.container}>
         <Avatar userId={user.userId} style={styles.image} />
 
-        <View style={styles.content}>
-          <Text style={styles.name} numberOfLines={1}>
-            {user.firstName} {user.lastName}
-          </Text>
+        <View style={styles.body}>
+          <View style={styles.content}>
+            <Text style={styles.name} numberOfLines={1}>
+              {user.firstName} {user.lastName}
+            </Text>
 
-          <Text numberOfLines={1} style={styles.subTitle}>
-            {user.email}
-          </Text>
+            <Text numberOfLines={1} style={styles.subTitle}>
+              {user.email}
+            </Text>
+          </View>
           <View style={styles.separator} />
         </View>
       </View>
@@ -60,14 +62,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginHorizontal: 10,
     marginTop: 5,
-    height: 45,
+    height: 55,
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  content: {
+  body: {
     flex: 1,
     height: '100%',
     justifyContent: 'space-between',
+  },
+  content: {
+    justifyContent: 'flex-start',
   },
   image: {
     width: 45,
@@ -80,6 +85,7 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: 'gray',
+    marginTop: 3,
   },
   separator: {
     height: StyleSheet.hairlineWidth,

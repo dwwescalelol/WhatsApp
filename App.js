@@ -26,11 +26,13 @@ export default function App() {
       const userInfo = await ApiHandler.getUserInfo(store.token, store.userId);
       const contacts = await ApiHandler.getContacts(store.token);
       const blocked = await ApiHandler.getBlockedUsers(store.token);
+      const chats = await ApiHandler.getChats(store.token);
       await store.setFirstName(userInfo.first_name);
       await store.setLastName(userInfo.last_name);
       await store.setEmail(userInfo.email);
       await store.setBlocked(blocked);
       await store.setContacts(contacts);
+      await store.setChats(chats);
     }
   };
 

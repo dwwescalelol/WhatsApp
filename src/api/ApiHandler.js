@@ -195,10 +195,7 @@ const ApiHandler = {
 
   getChats: async (token) => {
     const response = await ApiWrapper.getChats(token);
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    }
+    if (response.status === 200) return await response.json();
     if (response.status === 401)
       throw new Error('Not authorized to view chats.');
     if (response.status === 500) throw new Error('Server error.');

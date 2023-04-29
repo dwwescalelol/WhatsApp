@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     alignItems: 'center',
-    marginBottom: 16,
     width: '70%',
   },
   separator: {

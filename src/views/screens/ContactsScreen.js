@@ -1,23 +1,29 @@
 // ContactsScreen.js
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Switch from '../components/Switch';
 import ContactList from '../components/ContactList';
 import { useContacts } from '../../hooks/useContacts';
 
 const ContactsScreen = () => {
-  const { error, showContacts, store, setShowContacts, handleSwitchChange } =
-    useContacts();
+  const {
+    error,
+    showContacts,
+    contacts,
+    blocked,
+    setShowContacts,
+    handleSwitchChange,
+  } = useContacts();
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
+    <View style={styles.container}>
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'center',
         }}
       >
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={styles.switch}>
           <Switch
             label="Contacts"
             value={showContacts}
@@ -27,7 +33,7 @@ const ContactsScreen = () => {
             }}
           />
         </View>
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={styles.switch}>
           <Switch
             label="Blocked"
             value={!showContacts}
@@ -40,9 +46,19 @@ const ContactsScreen = () => {
         </View>
       </View>
 
-      <ContactList data={showContacts ? store.contacts : store.blocked} />
+      <ContactList data={showContacts ? contacts : blocked} />
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  switch: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});
 export default ContactsScreen;

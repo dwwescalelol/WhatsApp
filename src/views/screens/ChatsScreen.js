@@ -1,19 +1,19 @@
 import React from 'react';
 
 import { FlatList } from 'react-native';
-import chats from '../../../assets/data/chats.json';
+import { useChats } from '../../hooks/useChats';
 import ChatListItem from '../components/ChatListItem';
+import { View } from 'react-native-web';
 
 const ChatsScreen = () => {
-  const sortedChats = chats.sort((b, a) =>
-    a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)
-  );
-
+  const { error, chats } = useChats();
   return (
-    <FlatList
-      data={sortedChats}
-      renderItem={({ item }) => <ChatListItem chat={item} />}
-    />
+    <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <FlatList
+        data={chats}
+        renderItem={({ item }) => <ChatListItem chat={item} />}
+      />
+    </View>
   );
 };
 
