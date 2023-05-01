@@ -6,17 +6,28 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Avatar from './Avatar';
+import ApiHandler from '../../api/ApiHandler';
+import { useStore } from '../../stores/AppStore';
 
 dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat, onPress = null }) => {
+  const store = useStore();
   const navigation = useNavigation();
 
-  const handlePress = () => {
+  const getChat = async () => {
+    try {
+      return await ApiHandler.getChatDetails(store.token, chat.chat_id);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  const handlePress = async () => {
     if (onPress) {
       onPress(chat);
     } else {
-      navigation.navigate('Chat', { id: chat.chat_id, name: chat.name });
+      const responmc = await getChat();
+      navigation.navigate('Chat', { chat: responmc });
     }
   };
 

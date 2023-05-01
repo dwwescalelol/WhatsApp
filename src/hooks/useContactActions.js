@@ -114,7 +114,7 @@ export const useContactActions = (user) => {
 
   useEffect(() => {
     updateContactState();
-  }, [submitted]); // Update the dependency array
+  }, [submitted]);
 
   return {
     error,
