@@ -67,9 +67,7 @@ const ApiHandler = {
 
   uploadAvatar: async (token, userId, image) => {
     const response = await ApiWrapper.uploadAvatar(token, userId, image);
-    if (response.status === 200) {
-      return response;
-    }
+    if (response.status === 200) return response;
     if (response.status === 401) throw new Error('Not authorized to upload.');
     if (response.status == 403) throw new Error('Forbidden.');
     if (response.status === 404) throw new Error('User cannot be found.');
@@ -79,9 +77,7 @@ const ApiHandler = {
 
   addContact: async (token, userId) => {
     const response = await ApiWrapper.addContact(token, userId);
-    if (response.status === 200) {
-      return;
-    }
+    if (response.status === 200) return;
     if (response.status === 400)
       throw new Error('Cannot add yourself as a contact.');
     if (response.status === 401)
@@ -94,9 +90,7 @@ const ApiHandler = {
 
   removeContact: async (token, userId) => {
     const response = await ApiWrapper.removeContact(token, userId);
-    if (response.status === 200) {
-      return response.text();
-    }
+    if (response.status === 200) return response.text();
     if (response.status === 400)
       throw new Error('Cannot remove yourself as a contact.');
     if (response.status === 401)
@@ -121,9 +115,7 @@ const ApiHandler = {
 
   unblockUser: async (token, userId) => {
     const response = await ApiWrapper.unblockUser(token, userId);
-    if (response.status == 200) {
-      return response.text();
-    }
+    if (response.status == 200) return response.text();
     if (response.status == 400)
       throw new Error('Cannot unblock user who is not a contact.');
     if (response.status == 401) throw new Error('Not authorised to view.');
@@ -183,9 +175,7 @@ const ApiHandler = {
   // BLOCKED
   getBlockedUsers: async (token) => {
     const response = await ApiWrapper.getBlockedUsers(token);
-    if (response.status === 200) {
-      return await response.json();
-    }
+    if (response.status === 200) return await response.json();
     if (response.status === 401) throw new Error('Not authorized to view.');
     if (response.status === 500) throw new Error('Server error...');
     throw new Error('An unexpected error occurred.');
@@ -222,10 +212,7 @@ const ApiHandler = {
       limit,
       offset
     );
-    if (response.status === 200) {
-      const data = await response.json();
-      return data;
-    }
+    if (response.status === 200) return await response.json();
     if (response.status === 401)
       throw new Error('Not authorized to view chat details.');
     if (response.status === 404) throw new Error('Chat not found.');
@@ -235,9 +222,7 @@ const ApiHandler = {
 
   updateChat: async (token, chat_id, name) => {
     const response = await ApiWrapper.updateChat(token, chat_id, name);
-    if (response.status === 200) {
-      return;
-    }
+    if (response.status === 200) return;
     if (response.status === 400) throw new Error('Bad request.');
     if (response.status === 401)
       throw new Error('Not authorized to update chat.');
@@ -248,10 +233,9 @@ const ApiHandler = {
 
   addUserToChat: async (token, chat_id, user_id) => {
     const response = await ApiWrapper.addUserToChat(token, chat_id, user_id);
-    if (response.status === 200) {
-      return;
-    }
-    if (response.status === 400) throw new Error('Bad request.');
+    if (response.status === 200) return;
+    if (response.status === 400)
+      throw new Error('User is not in your contacts.');
     if (response.status === 401)
       throw new Error('Not authorized to add user to chat.');
     if (response.status === 403) throw new Error('Forbidden.');
