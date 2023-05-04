@@ -3,13 +3,9 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import Avatar from './Avatar';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
-
-dayjs.extend(relativeTime);
 
 const ChatListItem = ({ chat, onPress = null }) => {
   const store = useStore();
@@ -17,7 +13,11 @@ const ChatListItem = ({ chat, onPress = null }) => {
 
   const getChat = async () => {
     try {
-      return await ApiHandler.getChatDetails(store.token, chat.chat_id);
+      const chatResponce = await ApiHandler.getChatDetails(
+        store.token,
+        chat.chat_id
+      );
+      return { ...(await chatResponce), chatId: chat.chat_id };
     } catch (error) {
       setError(error.message);
     }
@@ -51,7 +51,7 @@ const ChatListItem = ({ chat, onPress = null }) => {
               </Text>
               <View>
                 <Text style={styles.timestamp} numberOfLines={1}>
-                  {chat.last_message.timestamp || 'Just Created'}
+                  {chat.last_message.timestamp || ''}
                 </Text>
               </View>
             </View>

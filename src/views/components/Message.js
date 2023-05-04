@@ -2,13 +2,13 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-dayjs.extend(relativeTime);
+import { useStore } from '../../stores/AppStore';
 
-const Message = ({ message }) => {
+const Message = ({ value }) => {
+  const store = useStore();
+
   const isMyMessage = () => {
-    return message.user.id === 'u1';
+    return value.author.user_id === store.userId;
   };
 
   return (
@@ -21,14 +21,16 @@ const Message = ({ message }) => {
         },
       ]}
     >
-      <Text>{message.text}</Text>
-      <Text style={styles.time}>{dayjs(message.createdAt).fromNow(true)}</Text>
+      <Text>{value.message}</Text>
+      <Text style={styles.time}>
+        {new Date(value.timestamp).toLocaleDateString()}
+      </Text>
     </View>
   );
 };
 
 Message.propTypes = {
-  message: PropTypes.object,
+  value: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -38,7 +40,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     maxWidth: '80%',
 
-    // Shadows
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 
     elevation: 1,
   },
-  message: {},
+  value: {},
   time: {
     alignSelf: 'flex-end',
     color: 'grey',

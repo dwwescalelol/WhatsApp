@@ -243,6 +243,40 @@ const ApiHandler = {
     if (response.status === 500) throw new Error('Server error.');
     throw new Error('An unexpected error occurred.');
   },
+
+  sendMessage: async (token, chat_id, message) => {
+    const response = await ApiWrapper.sendMessage(token, chat_id, message);
+    if (response.status === 200) return;
+    if (response.status === 401)
+      throw new Error('Not authorized to send a message in the chat.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  updateMessage: async (token, chat_id, message_id, message) => {
+    const response = await ApiWrapper.updateMessage(
+      token,
+      chat_id,
+      message_id,
+      message
+    );
+    if (response.status === 200) return await response.json();
+    if (response.status === 401)
+      throw new Error('Not authorized to update a message in the chat.');
+    if (response.status === 404) throw new Error('Message not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  deleteMessage: async (token, chat_id, message_id) => {
+    const response = await ApiWrapper.deleteMessage(token, chat_id, message_id);
+    if (response.status === 200) return await response.json();
+    if (response.status === 401)
+      throw new Error('Not authorized to delete a message in the chat.');
+    if (response.status === 404) throw new Error('Message not found.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
 };
 
 export default ApiHandler;

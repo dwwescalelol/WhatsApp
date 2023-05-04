@@ -247,6 +247,46 @@ const ApiWrapper = {
       },
     });
   },
+
+  sendMessage: async (token, chat_id, message) => {
+    const response = await fetch(`${baseURL}/chat/${chat_id}/message`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Authorization': token,
+      },
+      body: JSON.stringify({ message }),
+    });
+    return response;
+  },
+
+  updateMessage: async (token, chat_id, message_id, message) => {
+    const response = await fetch(
+      `${baseURL}/chat/${chat_id}/message/${message_id}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': token,
+        },
+        body: JSON.stringify({ message }),
+      }
+    );
+    return response;
+  },
+
+  deleteMessage: async (token, chat_id, message_id) => {
+    const response = await fetch(
+      `${baseURL}/chat/${chat_id}/message/${message_id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'X-Authorization': token,
+        },
+      }
+    );
+    return response;
+  },
 };
 
 export default ApiWrapper;
