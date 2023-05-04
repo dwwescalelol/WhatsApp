@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
 import { useStore } from '../../stores/AppStore';
+import formatTime from '../../utilities/FormatTime';
 
 const Message = ({ value }) => {
   const store = useStore();
@@ -22,9 +23,7 @@ const Message = ({ value }) => {
       ]}
     >
       <Text>{value.message}</Text>
-      <Text style={styles.time}>
-        {new Date(value.timestamp).toLocaleDateString()}
-      </Text>
+      <Text style={styles.time}>{formatTime(value.timestamp)}</Text>
     </View>
   );
 };

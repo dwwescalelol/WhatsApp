@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Avatar from './Avatar';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
+import formatTime from '../../utilities/FormatTime';
 
 const ChatListItem = ({ chat, onPress = null }) => {
   const store = useStore();
@@ -51,7 +52,9 @@ const ChatListItem = ({ chat, onPress = null }) => {
               </Text>
               <View>
                 <Text style={styles.timestamp} numberOfLines={1}>
-                  {chat.last_message.timestamp || ''}
+                  {chat.last_message.timestamp
+                    ? formatTime(chat.last_message.timestamp)
+                    : ''}
                 </Text>
               </View>
             </View>
