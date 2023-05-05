@@ -2,39 +2,71 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet } from 'react-native';
-import { useStore } from '../../stores/AppStore';
 import formatTime from '../../utilities/FormatTime';
 
-const Message = ({ value }) => {
-  const store = useStore();
+const Message = ({ value, isCurrentUser, isFirstMessage }) => {
+  const getColor = () => {
+    const input = JSON.stringify(value.author);
+    let hash = 0;
+    for (let i = 0; i < input.length; i++) {
+      hash = input.charCodeAt(i) + ((hash << 5) - hash);
+    }
 
-  const isMyMessage = () => {
-    return value.author.user_id === store.userId;
+    let color = '';
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ('00' + value.toString(16)).substr(-2);
+    }
+
+    return '#' + color;
   };
 
+  console.log(value);
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: isMyMessage() ? '#DCF8C5' : 'white',
-          alignSelf: isMyMessage() ? 'flex-end' : 'flex-start',
-        },
-      ]}
-    >
-      <Text>{value.message}</Text>
-      <Text style={styles.time}>{formatTime(value.timestamp)}</Text>
+    <View style={[styles.container, { marginTop: isFirstMessage ? 13 : 0 }]}>
+      <View
+        style={[
+          styles.textBox,
+          {
+            backgroundColor: isCurrentUser ? '#DCF8C5' : 'white',
+            alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
+          },
+        ]}
+      >
+        {isFirstMessage && !isCurrentUser ? (
+          <Text
+            style={[
+              styles.name,
+              {
+                alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
+                color: getColor(),
+              },
+            ]}
+          >
+            {value.author.first_name}
+          </Text>
+        ) : null}
+        <Text>{value.message}</Text>
+        <Text style={styles.time}>{formatTime(value.timestamp)}</Text>
+      </View>
     </View>
   );
 };
 
 Message.propTypes = {
   value: PropTypes.object,
+  isCurrentUser: PropTypes.bool,
+  isFirstMessage: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 5,
+    marginBottom: 2,
+  },
+  name: {
+    fontWeight: 'bold',
+  },
+  textBox: {
     padding: 10,
     borderRadius: 10,
     maxWidth: '80%',

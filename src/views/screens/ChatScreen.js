@@ -15,6 +15,25 @@ const ChatScreen = ({ route }) => {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [formattedMessages, setFormattedMessages] = useState([]);
+
+  // have to reverse the list twice to get name to apear in right place.
+  const formatChat = () => {
+    const reversedMessages = messages.reverse();
+    const messagesWithSenderInfo = [];
+
+    for (let index = 0; index < reversedMessages.length; index++) {
+      const message = reversedMessages[index];
+      const author = message.author.user_id;
+      const isCurrentUser = author === store.userId;
+      const isFirstMessage =
+        index === 0 || reversedMessages[index - 1].author.user_id !== author;
+
+      messagesWithSenderInfo.push([message, isCurrentUser, isFirstMessage]);
+    }
+    console.log(messagesWithSenderInfo);
+    return messagesWithSenderInfo.reverse();
+  };
 
   const updateChat = async () => {
     try {
@@ -46,19 +65,29 @@ const ChatScreen = ({ route }) => {
   };
 
   useEffect(() => {
+    setFormattedMessages(formatChat());
+  }, [messages]);
+
+  useEffect(() => {
     const interval = setInterval(async () => {
       const updatedMessages = (await updateChat()).messages;
       if (JSON.stringify(updatedMessages) !== JSON.stringify(messages))
         setMessages(updatedMessages);
     }, 2500);
     return () => clearInterval(interval);
-  });
+  }, []);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={messages}
-        renderItem={({ item }) => <Message value={item} />}
+        data={formattedMessages}
+        renderItem={({ item }) => (
+          <Message
+            value={item[0]}
+            isCurrentUser={item[1]}
+            isFirstMessage={item[2]}
+          />
+        )}
         style={styles.list}
         inverted
       />
