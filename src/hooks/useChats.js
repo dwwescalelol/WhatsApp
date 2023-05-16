@@ -1,6 +1,9 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { useStore } from '../stores/AppStore';
 import ApiHandler from '../api/ApiHandler';
+
+import { useFocusEffect } from '@react-navigation/native';
 
 export const useChats = () => {
   const store = useStore();
@@ -18,9 +21,12 @@ export const useChats = () => {
     }
   };
 
-  useEffect(() => {
-    getChats();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getChats();
+      return () => {};
+    }, [])
+  );
 
   return {
     error,
