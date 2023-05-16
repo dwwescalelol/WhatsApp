@@ -50,20 +50,18 @@ const EditableProfile = () => {
           onFocus={() => {}}
           placeholder="First Name"
           errorMessage={Validate.name(firstName)}
+          isEdited={firstName !== store.firstName}
+          editMessage="First name has been edited"
         />
-        {firstName !== store.firstName ? (
-          <Text style={styles.editText}>First name has been edited</Text>
-        ) : null}
         <InputField
           value={lastName}
           onChangeText={setLastName}
           onFocus={() => {}}
           placeholder="Last Name"
           errorMessage={Validate.name(lastName)}
+          isEdited={lastName !== store.lastName}
+          editMessage="Last name has been edited"
         />
-        {lastName !== store.lastName ? (
-          <Text style={styles.editText}>Last name has been edited</Text>
-        ) : null}
       </View>
 
       <View style={styles.separator} />
@@ -77,8 +75,9 @@ const EditableProfile = () => {
           onFocus={() => {}}
           placeholder="Email"
           errorMessage={Validate.email(email)}
+          isEdited={email !== store.email}
+          editMessage="Email has been edited"
         />
-        {email !== store.email ? <Text>Email has been edited</Text> : null}
       </View>
 
       <View style={styles.separator} />
@@ -125,6 +124,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   editText: {
+    alignSelf: 'flex-start',
     color: '#25D366',
   },
 });

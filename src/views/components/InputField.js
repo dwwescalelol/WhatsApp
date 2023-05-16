@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
 import ErrorMessage from './ErrorMessage';
+import EditMessage from './EditMessage';
 
 const InputField = ({
   value,
@@ -11,6 +12,8 @@ const InputField = ({
   placeholder,
   style,
   errorMessage,
+  isEdited,
+  editMessage,
 }) => {
   const [error, setError] = useState('');
 
@@ -28,7 +31,11 @@ const InputField = ({
         }}
         onFocus={onFocus}
       />
-      <ErrorMessage message={error} />
+      {error ? (
+        <ErrorMessage message={error} />
+      ) : (
+        <EditMessage condition={isEdited} message={editMessage} />
+      )}
     </View>
   );
 };
@@ -41,6 +48,8 @@ InputField.propTypes = {
   placeholder: PropTypes.string,
   style: PropTypes.object,
   errorMessage: PropTypes.string,
+  isEdited: PropTypes.bool,
+  editMessage: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

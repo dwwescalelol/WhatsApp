@@ -28,6 +28,10 @@ export const useEditProfile = () => {
     setError('');
     setSubmitted(true);
     try {
+      if (Validate.name(firstName)) throw new Error('Invalid First Name.');
+      if (Validate.name(lastName)) throw new Error('Invalid Last Name.');
+      if (Validate.email(email)) throw new Error('Invalid Email.');
+
       const origionalUserInfo = {
         firstName: store.firstName,
         lastName: store.lastName,
