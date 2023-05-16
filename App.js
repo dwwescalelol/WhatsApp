@@ -7,40 +7,15 @@ import LoginNavigator from './src/navigation/LoginNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import MainStackNavigator from './src/navigation/MainStackNavigator';
 import ApiHandler from './src/api/ApiHandler';
+import { useInitialiseStore } from './src/hooks/useInitialiseStore';
 
 export default function App() {
   const store = useStore();
-
-  const initialseInstance = async () => {
-    if (!store.token) {
-      const token = await AsyncStorage.getItem('token');
-      const userId = await AsyncStorage.getItem('userId');
-
-      if (token) {
-        store.setToken(token);
-        store.setUserId(parseInt(userId));
-      }
-    }
-
-    if (store.token) {
-      const userInfo = await ApiHandler.getUserInfo(store.token, store.userId);
-      const avatar = await ApiHandler.getAvatar(store.token, store.userId);
-      const contacts = await ApiHandler.getContacts(store.token);
-      const blocked = await ApiHandler.getBlockedUsers(store.token);
-      const chats = await ApiHandler.getChats(store.token);
-      await store.setFirstName(userInfo.first_name);
-      await store.setLastName(userInfo.last_name);
-      await store.setEmail(userInfo.email);
-      await store.setAvatar(avatar);
-      await store.setBlocked(blocked);
-      await store.setContacts(contacts);
-      await store.setChats(chats);
-    }
-  };
+  const handleInitialStore = useInitialiseStore();
 
   // whenever token updates function is recalled
   useEffect(() => {
-    initialseInstance();
+    handleInitialStore();
   }, [store.token]);
 
   return (

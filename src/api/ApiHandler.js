@@ -1,27 +1,16 @@
-import React from 'react';
 import ApiWrapper from './ApiWrapper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useStore } from '../stores/AppStore';
 
 const ApiHandler = {
   // USER
   signUp: async (firstName, lastName, email, password) => {
-    const store = useStore.getState();
     const response = await ApiWrapper.register(
       firstName,
       lastName,
       email,
       password
     );
-    if (response.status == 201) {
-      const session = await ApiHandler.login(email, password);
-      await AsyncStorage.multiSet([
-        ['userId', session.id],
-        ['token', session.token],
-      ]);
-      await store.setUserId(session.id);
-      await store.setToken(session.token);
-    }
+    if (response.status == 201) return await ApiHandler.login(email, password);
+
     if (!response.ok) {
       throw new Error(await response.text());
     }

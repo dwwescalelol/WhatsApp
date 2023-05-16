@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import ApiHandler from '../api/ApiHandler';
 import Validate from '../utilities/ValidateFields';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStore } from '../stores/AppStore';
 
 export const useSignUp = () => {
+  const store = useStore();
   const navigation = useNavigation();
 
   const [error, setError] = useState('');
@@ -26,7 +29,18 @@ export const useSignUp = () => {
     }
 
     try {
-      await ApiHandler.signUp(firstName, lastName, email, password);
+      const session = await ApiHandler.signUp(
+        firstName,
+        lastName,
+        email,
+        password
+      );
+      await AsyncStorage.multiSet([
+        ['userId', session.id],
+        ['token', session.token],
+      ]);
+      await store.setUserId(session.id);
+      await store.setToken(session.token);
     } catch (error) {
       setError(error.message);
     } finally {

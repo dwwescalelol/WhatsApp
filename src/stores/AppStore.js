@@ -61,8 +61,4 @@ export const useStore = create((set, get) => ({
     set((state) => ({
       chats: state.chats.filter((chat) => chat.chat_id !== chatId),
     })),
-  // changeChatName: (chatId, name) =>
-  //   set((state) => ({
-  //     chats: state.chats.filter((chat) => chat.chat_id !== chatId),
-  //   })),
 }));

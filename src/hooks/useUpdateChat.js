@@ -8,10 +8,10 @@ export const useUpdateChat = () => {
 
   const handleUpdateChat = async () => {
     try {
+      navigation.navigate('Chats');
+      await store.setChats([]);
       const chats = await ApiHandler.getChats(store.token);
       await store.setChats(chats);
-
-      navigation.navigate('Chats');
     } catch {}
   };
 
