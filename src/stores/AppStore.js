@@ -9,12 +9,14 @@ export const useStore = create((set, get) => ({
   firstName: null,
   lastName: null,
   email: null,
+  avatar: null,
 
   setToken: (token) => set({ token }),
   setUserId: (userId) => set({ userId }),
   setFirstName: (firstName) => set({ firstName }),
   setLastName: (lastName) => set({ lastName }),
   setEmail: (email) => set({ email }),
+  setAvatar: (avatar) => set({ avatar }),
 
   updateUserInfo: (firstName, lastName, email) =>
     set({

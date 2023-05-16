@@ -8,8 +8,11 @@ import Avatar from './Avatar';
 import InputField from './InputField';
 import Button from '../components/Button';
 import Validate from '../../utilities/ValidateFields';
+import { useStore } from '../../stores/AppStore';
 
 const EditableProfile = () => {
+  const store = useStore();
+
   const {
     userId,
     firstName,
@@ -29,7 +32,14 @@ const EditableProfile = () => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={pickImage}>
-        {avatar ? <Avatar uri={avatar} /> : <Avatar userId={userId} />}
+        {avatar ? (
+          <View>
+            <Avatar uri={avatar} />
+            <Text style={styles.editText}>Avatar has been edited</Text>
+          </View>
+        ) : (
+          <Avatar userId={userId} />
+        )}
       </TouchableOpacity>
 
       {/* first and last name */}
@@ -41,6 +51,9 @@ const EditableProfile = () => {
           placeholder="First Name"
           errorMessage={Validate.name(firstName)}
         />
+        {firstName !== store.firstName ? (
+          <Text style={styles.editText}>First name has been edited</Text>
+        ) : null}
         <InputField
           value={lastName}
           onChangeText={setLastName}
@@ -48,6 +61,9 @@ const EditableProfile = () => {
           placeholder="Last Name"
           errorMessage={Validate.name(lastName)}
         />
+        {lastName !== store.lastName ? (
+          <Text style={styles.editText}>Last name has been edited</Text>
+        ) : null}
       </View>
 
       <View style={styles.separator} />
@@ -62,6 +78,7 @@ const EditableProfile = () => {
           placeholder="Email"
           errorMessage={Validate.email(email)}
         />
+        {email !== store.email ? <Text>Email has been edited</Text> : null}
       </View>
 
       <View style={styles.separator} />
@@ -106,6 +123,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
+  },
+  editText: {
+    color: '#25D366',
   },
 });
 

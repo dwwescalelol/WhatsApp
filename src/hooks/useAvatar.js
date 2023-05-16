@@ -8,6 +8,8 @@ export const useAvatar = (userId, uri) => {
   const [avatarUri, setAvatarUri] = useState('');
 
   const getUserProfile = async () => {
+    if (userId === store.userId) return store.avatar;
+
     try {
       return await ApiHandler.getAvatar(store.token, userId);
     } catch (error) {

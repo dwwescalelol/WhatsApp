@@ -10,6 +10,7 @@ import CreateChatScreen from '../views/screens/CreateChatScreen';
 import IconButton from '../views/components/IconButton';
 import ChatSettingsScreen from '../views/screens/ChatSettingsScreen';
 import { useNavigation } from '@react-navigation/native';
+import EditableProfile from '../views/components/EditableProfile';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,7 @@ const MainStackNavigator = () => {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Search" component={SearchContactScreen} />
       <Stack.Screen name="CreateChat" component={CreateChatScreen} />
+      <Stack.Screen name="EditProfile" component={EditableProfile} />
     </Stack.Navigator>
   );
 };

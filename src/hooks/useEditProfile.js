@@ -74,6 +74,7 @@ export const useEditProfile = () => {
       try {
         const blob = await (await fetch(avatar)).blob();
         await ApiHandler.uploadAvatar(store.token, store.userId, blob);
+        store.setAvatar(avatar);
         setAvatar(null);
       } catch (error) {
         setError(error.message);

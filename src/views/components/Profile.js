@@ -25,7 +25,7 @@ const Profile = ({ user }) => {
       {/* email */}
       <View style={styles.infoContainer}>
         <Text style={styles.infoTitle}>Email</Text>
-        <Text style={styles.infoText}>{user.email}</Text>
+        <Text>{user.email}</Text>
       </View>
 
       <View style={styles.separator} />
@@ -77,11 +77,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-  },
-  userInfo: {
-    alignItems: 'center',
-    marginBottom: 16,
-    width: '70%',
   },
   separator: {
     height: 1,
