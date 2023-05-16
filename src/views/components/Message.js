@@ -21,7 +21,6 @@ const Message = ({ value, isCurrentUser, isFirstMessage }) => {
     return '#' + color;
   };
 
-  console.log(value);
   return (
     <View style={[styles.container, { marginTop: isFirstMessage ? 13 : 0 }]}>
       <View

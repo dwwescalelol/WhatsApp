@@ -1,10 +1,12 @@
-// hooks/useCreateChat.js
 import { useState } from 'react';
 import { useStore } from '../stores/AppStore';
 import ApiHandler from '../api/ApiHandler';
+import { useUpdateChat } from './useUpdateChat';
 
 export const useCreateChat = () => {
   const store = useStore();
+
+  const handleUpdateChat = useUpdateChat();
 
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -34,8 +36,7 @@ export const useCreateChat = () => {
       setSelectedUsers([]);
       setChatName('');
 
-      // Navigate to the chat screen or any other desired screen
-      // navigation.navigate('ChatScreen', { chatId });
+      await handleUpdateChat();
     } catch (error) {
       setError(error.message);
     } finally {

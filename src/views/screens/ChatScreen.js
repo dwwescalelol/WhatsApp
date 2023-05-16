@@ -31,7 +31,6 @@ const ChatScreen = ({ route }) => {
 
       messagesWithSenderInfo.push([message, isCurrentUser, isFirstMessage]);
     }
-    console.log(messagesWithSenderInfo);
     return messagesWithSenderInfo.reverse();
   };
 

@@ -244,6 +244,23 @@ const ApiHandler = {
     throw new Error('An unexpected error occurred.');
   },
 
+  removeUserFromChat: async (token, chat_id, user_id) => {
+    const response = await ApiWrapper.removeUserFromChat(
+      token,
+      chat_id,
+      user_id
+    );
+    if (response.status === 200) return await response.text();
+    if (response.status === 401)
+      throw new Error('Not authorized to remove a user from the chat.');
+    if (response.status === 404) throw new Error('User not found.');
+    if (response.status === 403) throw new Error('Forbidden.');
+    if (response.status === 500) throw new Error('Server error.');
+    throw new Error('An unexpected error occurred.');
+  },
+
+  // MESSAGES
+
   sendMessage: async (token, chat_id, message) => {
     const response = await ApiWrapper.sendMessage(token, chat_id, message);
     if (response.status === 200) return;
