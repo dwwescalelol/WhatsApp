@@ -1,7 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
-import NotImplementedScreen from '../views/screens/NotImplementedScreen';
 import ChatsScreen from '../views/screens/ChatsScreen';
 import { Ionicons } from '@expo/vector-icons';
 import ContactsScreen from '../views/screens/ContactsScreen';
@@ -33,16 +32,6 @@ const MainTabNavigator = () => {
               iconName={'person-add-outline'}
               onPress={() => navigation.navigate('Search')}
             />
-          ),
-          tabBarLabel: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Camera"
-        component={NotImplementedScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="camera-outline" size={size} color={color} />
           ),
           tabBarLabel: () => null,
         }}

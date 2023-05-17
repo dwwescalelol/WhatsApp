@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { FlatList, View } from 'react-native';
+import { FlatList, View, Text, Image } from 'react-native';
 import { useChats } from '../../hooks/useChats';
+import { t } from '../../locales';
+
 import ChatListItem from '../components/ChatListItem';
 
 const ChatsScreen = () => {
@@ -24,6 +26,22 @@ const ChatsScreen = () => {
         data={sortedChats}
         renderItem={({ item }) => <ChatListItem chat={item} />}
       />
+      {sortedChats.length == 0 ? (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <Text style={{ fontSize: 18, fontWeight: '500', color: 'gray' }}>
+            {t('nochats')}
+          </Text>
+          <Image
+            source={{
+              uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/images/capybara+copy.png',
+            }}
+            style={{ width: '100%', aspectRatio: 2 / 1 }}
+            resizeMode="contain"
+          />
+        </View>
+      ) : null}
     </View>
   );
 };
