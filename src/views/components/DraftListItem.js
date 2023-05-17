@@ -5,9 +5,12 @@ import { Text, StyleSheet, Pressable, View } from 'react-native';
 import formatTime from '../../utilities/FormatTime';
 import IconButton from './IconButton';
 import GlobalDateTimePicker from 'react-native-global-datetimepicker';
+import { DateTimePickerMode } from 'react-native-global-datetimepicker';
+import { set } from 'react-native-reanimated';
 
 const DraftListItem = ({ draft, onPress, onDelete, onSchedule }) => {
   const [calendarVisible, setCalendarVisible] = useState(false);
+  const [dateTime, setDateTime] = useState(DateTimePickerMode.Day);
 
   return (
     <View>
@@ -43,13 +46,19 @@ const DraftListItem = ({ draft, onPress, onDelete, onSchedule }) => {
             }}
           />
           <GlobalDateTimePicker
+            mode={dateTime}
             visible={calendarVisible}
             onCancel={() => setCalendarVisible(false)}
             onSelect={(gregorianDate) => {
+              if (dateTime == DateTimePickerMode.Day) {
+                setDateTime(DateTimePickerMode.Hour);
+                return;
+              }
               onSchedule({ ...draft, scheduled: gregorianDate.getTime() });
               setCalendarVisible(false);
             }}
           />
+
           <IconButton
             iconName="ios-remove-circle"
             onPress={() => {
