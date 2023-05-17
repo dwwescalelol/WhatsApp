@@ -4,7 +4,6 @@ import ContactList from '../components/ContactList';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
-import { useSearchUsers } from '../../hooks/useSearchUsers';
 import { useCreateChat } from '../../hooks/useCreateChat';
 import { t } from '../../locales';
 
@@ -19,9 +18,6 @@ const CreateChatScreen = () => {
     setSelectedUsers,
     handleCreateChat,
   } = useCreateChat();
-
-  const { searchText, searchResults, searchError, setSearchText } =
-    useSearchUsers({ searchIn: 'contacts' });
 
   const handleItemPress = (user) => {
     const users = selectedUsers.find((item) => item.userId === user.userId);
@@ -43,18 +39,9 @@ const CreateChatScreen = () => {
           onChangeText={setChatName}
           placeholder={t('chatn')}
         />
-        <InputField
-          value={searchText}
-          onChangeText={setSearchText}
-          placeholder={t('search')}
-          style={{ marginBottom: 10 }}
-        />
-        <ErrorMessage message={searchError} />
       </View>
       <ContactList
-        data={
-          searchResults.length == 0 && !searchText ? contacts : searchResults
-        }
+        data={contacts}
         onItemPress={handleItemPress}
         selectedItems={selectedUsers}
       />
