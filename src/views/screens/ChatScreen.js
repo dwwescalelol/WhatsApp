@@ -82,7 +82,7 @@ const ChatScreen = ({ route }) => {
     }
     if (Object.values(currentDraft || {}).length > 0) {
       handleSendDraft(currentDraft);
-    } else handleSendMessage(message);
+    } else handleSendMessage();
 
     setMessage('');
   };
@@ -99,7 +99,7 @@ const ChatScreen = ({ route }) => {
     setSucsess('Sent draft!');
   };
 
-  const handleSendMessage = async (message) => {
+  const handleSendMessage = async () => {
     try {
       await ApiHandler.sendMessage(store.token, chat.chatId, message);
       setMessages((await updateChat()).messages);
@@ -188,7 +188,22 @@ const ChatScreen = ({ route }) => {
         (draft) => draft.scheduled && draft.scheduled <= currentTime
       );
 
-      scheduledDrafts.map((draft) => handleSendDraft(draft.message));
+      scheduledDrafts.map(async (scheduledDraft) => {
+        try {
+          await ApiHandler.sendMessage(
+            store.token,
+            scheduledDraft.chatId,
+            scheduledDraft.message
+          );
+          const newDrafts = allDrafts.filter(
+            (draft) => draft.draftId !== scheduledDraft.draftId
+          );
+          await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+          setChatDrafts(newDrafts);
+        } catch (error) {
+          setError(error.message);
+        }
+      });
     }, 1000);
 
     return () => clearInterval(interval);
@@ -206,6 +221,22 @@ const ChatScreen = ({ route }) => {
     }, 2500);
     return () => clearInterval(interval);
   }, []);
+
+  // this part GPT
+  // Use this
+  // setInterval(() => {}, timeMs)
+  // to check the current time against all drafts
+  // if the current time is greater than the time they wished to send
+  // 1000000000 > 9128498129489 = send
+  // delete the draft
+  // recreate the setInterval everytime the drafts change (useEffect)
+  // inside the useEffect make sure that the subscription is deleted by the return value
+  // firstly ofc setup the ability to add schedules.
+
+  // useEffect(() => {
+  //  const subscription = useInterval(() => blah blah check current time Date.now(), timeMs);
+  //  return () => clearInterval(subscription);
+  // }, [store.drafts])
 
   return (
     <View style={styles.container}>
