@@ -1,21 +1,28 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, FlatList, View } from 'react-native';
+import { StyleSheet, FlatList, View, Text } from 'react-native';
 import IconButton from '../components/IconButton';
 import Message from '../components/Message';
 import InputField from '../components/InputField';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import ErrorMessage from '../components/ErrorMessage';
+import SucsessMessage from '../components/SucsessMessage';
+import Drafts from '../components/Drafts';
+import { v4 as uuidV4 } from 'uuid';
 
 const ChatScreen = ({ route }) => {
   const { chat } = route.params;
   const store = useStore();
+
   const [messages, setMessages] = useState(chat.messages);
   const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [sucsess, setSucsess] = useState('');
   const [formattedMessages, setFormattedMessages] = useState([]);
+  const [drafts, setDrafts] = useState([]);
+  const [currentDraft, setCurrentDraft] = useState({});
 
   // have to reverse the list twice to get name to apear in right place.
   const formatChat = () => {
@@ -34,6 +41,25 @@ const ChatScreen = ({ route }) => {
     return messagesWithSenderInfo.reverse();
   };
 
+  const getAsyncDrafts = async () => {
+    const json = (await AsyncStorage.getItem('drafts')) || '[]';
+    return JSON.parse(json);
+  };
+
+  const setChatDrafts = (allDrafts) => {
+    const chatDrafts = allDrafts.filter((draft) => draft.chatId == chat.chatId);
+    setDrafts(chatDrafts);
+  };
+
+  const getDrafts = async () => {
+    const allDrafts = await getAsyncDrafts();
+    setChatDrafts(allDrafts);
+  };
+
+  useEffect(() => {
+    getDrafts();
+  }, []);
+
   const updateChat = async () => {
     try {
       const chatResponce = await ApiHandler.getChatDetails(
@@ -46,21 +72,86 @@ const ChatScreen = ({ route }) => {
     }
   };
 
+  const handleSend = async () => {
+    if (!message.trim()) {
+      setError('Message must have more than one charecter.');
+      return;
+    }
+    if (Object.values(currentDraft || {}).length > 0) {
+      handleSendDraft();
+    } else handleSendMessage();
+
+    setMessage('');
+  };
+
+  const handleSendDraft = async () => {
+    const allDrafts = await getAsyncDrafts();
+    const newDrafts = allDrafts.filter(
+      (draft) => draft.draftId !== currentDraft.draftId
+    );
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setChatDrafts(newDrafts);
+    setSucsess('Sent draft!');
+  };
+
   const handleSendMessage = async () => {
-    setSubmitted(true);
     setError('');
+    setSucsess('');
 
     try {
-      if (!message.trim())
-        throw new Error('Message must have more than one charecter.');
       await ApiHandler.sendMessage(store.token, chat.chatId, message);
       setMessages((await updateChat()).messages);
-      setMessage('');
     } catch (error) {
       setError(error.message);
-    } finally {
-      setSubmitted(false);
     }
+  };
+
+  const handleDraft = async () => {
+    if (!message.trim()) {
+      setError('Cant save empty message as draft');
+      return;
+    }
+    if (Object.values(currentDraft || {}).length > 0) {
+      handleEditDraft();
+    } else handleSaveDraft();
+
+    setCurrentDraft({});
+    setMessage('');
+  };
+
+  const handleEditDraft = async () => {
+    const allDrafts = await getAsyncDrafts();
+
+    const newDrafts = allDrafts.map((draft) =>
+      draft.draftId === currentDraft.draftId ? { ...draft, message } : draft
+    );
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setChatDrafts(newDrafts);
+    setSucsess('Draft edited');
+  };
+
+  const handleSaveDraft = async () => {
+    setError('');
+    setSucsess('');
+
+    const draft = {
+      chatId: chat.chatId,
+      timestamp: new Date().getTime(),
+      message: message,
+      draftId: uuidV4(),
+    };
+    const allDrafts = await getAsyncDrafts();
+    allDrafts.push(draft);
+
+    await AsyncStorage.setItem('drafts', JSON.stringify(allDrafts));
+    setChatDrafts(allDrafts);
+    setSucsess('Draft Saved!');
+  };
+
+  const handleDraftPress = (draft) => {
+    store.closeDrafts();
+    setMessage(draft.message);
+    setCurrentDraft(draft);
   };
 
   useEffect(() => {
@@ -78,6 +169,12 @@ const ChatScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Drafts
+        visible={store.isDraftsOpen}
+        onClose={() => store.closeDrafts()}
+        drafts={drafts}
+        onElementPress={handleDraftPress}
+      />
       <FlatList
         data={formattedMessages}
         renderItem={({ item }) => (
@@ -91,6 +188,10 @@ const ChatScreen = ({ route }) => {
         inverted
       />
       <View style={styles.separator} />
+      <View style={styles.messages}>
+        <ErrorMessage message={error} />
+        <SucsessMessage message={sucsess} />
+      </View>
       <View style={styles.sendMessage}>
         <InputField
           value={message}
@@ -98,7 +199,8 @@ const ChatScreen = ({ route }) => {
           placeholder="Type Message..."
           style={styles.inputField}
         />
-        <IconButton iconName="send-outline" onPress={handleSendMessage} />
+        <IconButton iconName="save-outline" onPress={handleDraft} />
+        <IconButton iconName="send-outline" onPress={handleSend} />
       </View>
     </View>
   );
@@ -123,11 +225,17 @@ const styles = StyleSheet.create({
   },
   inputField: {
     marginTop: 0,
+    width: '70%',
   },
   separator: {
     height: 1,
     backgroundColor: '#c7c7c7',
     marginVertical: 10,
+  },
+  messages: {
+    marginHorizontal: 10,
+    marginTop: -5,
+    marginBottom: 5,
   },
 });
 

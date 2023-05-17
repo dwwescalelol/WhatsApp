@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import ChatScreen from '../views/screens/ChatScreen';
@@ -11,11 +11,14 @@ import IconButton from '../views/components/IconButton';
 import ChatSettingsScreen from '../views/screens/ChatSettingsScreen';
 import { useNavigation } from '@react-navigation/native';
 import EditableProfile from '../views/components/EditableProfile';
+import { useStore } from '../stores/AppStore';
 
 const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = () => {
   const navigation = useNavigation();
+
+  const store = useStore();
 
   return (
     <Stack.Navigator
@@ -37,12 +40,18 @@ const MainStackNavigator = () => {
           return {
             title: chat.name,
             headerRight: () => (
-              <IconButton
-                iconName="settings-outline"
-                onPress={() =>
-                  navigation.navigate('ChatSettings', { chat: chat })
-                }
-              />
+              <View style={{ flexDirection: 'row' }}>
+                <IconButton
+                  iconName="albums-outline"
+                  onPress={() => store.openDrafts()}
+                />
+                <IconButton
+                  iconName="settings-outline"
+                  onPress={() =>
+                    navigation.navigate('ChatSettings', { chat: chat })
+                  }
+                />
+              </View>
             ),
           };
         }}

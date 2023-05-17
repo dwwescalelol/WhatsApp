@@ -61,4 +61,9 @@ export const useStore = create((set, get) => ({
     set((state) => ({
       chats: state.chats.filter((chat) => chat.chat_id !== chatId),
     })),
+
+  isDraftsOpen: false,
+  setIsDraftsOpen: (isDraftsOpen) => set({ isDraftsOpen }),
+  openDrafts: () => set({ isDraftsOpen: true }),
+  closeDrafts: () => set({ isDraftsOpen: false }),
 }));

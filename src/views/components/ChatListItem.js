@@ -27,8 +27,8 @@ const ChatListItem = ({ chat, onPress = null }) => {
     if (onPress) {
       onPress(chat);
     } else {
-      const responmc = await getChat();
-      navigation.navigate('Chat', { chat: responmc });
+      const responce = await getChat();
+      navigation.navigate('Chat', { chat: responce });
     }
   };
 
