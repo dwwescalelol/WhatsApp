@@ -23,6 +23,7 @@ const ChatScreen = ({ route }) => {
   const [formattedMessages, setFormattedMessages] = useState([]);
   const [drafts, setDrafts] = useState([]);
   const [currentDraft, setCurrentDraft] = useState({});
+  const [currentEdited, setCurrentEdited] = useState({});
 
   // have to reverse the list twice to get name to apear in right place.
   const formatChat = () => {
@@ -80,9 +81,11 @@ const ChatScreen = ({ route }) => {
       setError('Message must have more than one charecter.');
       return;
     }
-    if (Object.values(currentDraft || {}).length > 0) {
+    if (Object.values(currentDraft || {}).length > 0)
       handleSendDraft(currentDraft);
-    } else handleSendMessage();
+    else if (Object.values(currentEdited || {}).length > 0)
+      sendEdittedMessage(currentEdited);
+    else handleSendMessage();
 
     setMessage('');
   };
@@ -154,6 +157,8 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleDraftPress = (draft) => {
+    setError('');
+    setSucsess('Editing Draft:');
     store.closeDrafts();
     setMessage(draft.message);
     setCurrentDraft(draft);
@@ -177,6 +182,40 @@ const ChatScreen = ({ route }) => {
     );
     await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
     setChatDrafts(newDrafts);
+  };
+
+  const handleDeleteMessage = async (message) => {
+    console.log(message);
+    try {
+      await ApiHandler.deleteMessage(
+        store.token,
+        chat.chatId,
+        message.message_id
+      );
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  const sendEdittedMessage = async () => {
+    console.log(currentEdited);
+    try {
+      await ApiHandler.updateMessage(
+        store.token,
+        chat.chatId,
+        currentEdited.message_id,
+        message
+      );
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  const handleEditMessage = async (message) => {
+    setCurrentDraft({});
+    setCurrentEdited(message);
+    setSucsess('Editing message:');
+    setMessage(message.message);
   };
 
   useEffect(() => {
@@ -222,22 +261,6 @@ const ChatScreen = ({ route }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // this part GPT
-  // Use this
-  // setInterval(() => {}, timeMs)
-  // to check the current time against all drafts
-  // if the current time is greater than the time they wished to send
-  // 1000000000 > 9128498129489 = send
-  // delete the draft
-  // recreate the setInterval everytime the drafts change (useEffect)
-  // inside the useEffect make sure that the subscription is deleted by the return value
-  // firstly ofc setup the ability to add schedules.
-
-  // useEffect(() => {
-  //  const subscription = useInterval(() => blah blah check current time Date.now(), timeMs);
-  //  return () => clearInterval(subscription);
-  // }, [store.drafts])
-
   return (
     <View style={styles.container}>
       <Drafts
@@ -255,6 +278,8 @@ const ChatScreen = ({ route }) => {
             value={item[0]}
             isCurrentUser={item[1]}
             isFirstMessage={item[2]}
+            onDelete={handleDeleteMessage}
+            onEdit={handleEditMessage}
           />
         )}
         style={styles.list}

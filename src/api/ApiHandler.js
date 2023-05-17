@@ -266,7 +266,7 @@ const ApiHandler = {
       message_id,
       message
     );
-    if (response.status === 200) return await response.json();
+    if (response.status === 200) return;
     if (response.status === 401)
       throw new Error('Not authorized to update a message in the chat.');
     if (response.status === 404) throw new Error('Message not found.');
@@ -276,7 +276,7 @@ const ApiHandler = {
 
   deleteMessage: async (token, chat_id, message_id) => {
     const response = await ApiWrapper.deleteMessage(token, chat_id, message_id);
-    if (response.status === 200) return await response.json();
+    if (response.status === 200) return;
     if (response.status === 401)
       throw new Error('Not authorized to delete a message in the chat.');
     if (response.status === 404) throw new Error('Message not found.');
