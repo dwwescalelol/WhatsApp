@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import PropTypes from 'prop-types';
 import { Text, StyleSheet, Pressable, View } from 'react-native';
 import formatTime from '../../utilities/FormatTime';
 import IconButton from './IconButton';
+import GlobalDateTimePicker from 'react-native-global-datetimepicker';
 
-const DraftListItem = ({ draft, onPress, onSchedule, onDelete }) => {
+const DraftListItem = ({ draft, onPress, onDelete, onSchedule }) => {
+  const [calendarVisible, setCalendarVisible] = useState(false);
+
   return (
     <View>
       <View style={styles.container}>
@@ -24,13 +27,35 @@ const DraftListItem = ({ draft, onPress, onSchedule, onDelete }) => {
           <View style={styles.mainBody}>
             <View style={styles.textContent}>
               <Text> {draft.message} </Text>
-              <Text style={styles.time}>{formatTime(draft.timestamp)}</Text>
+              <Text style={styles.time}>
+                {draft.scheduled
+                  ? formatTime(draft.scheduled)
+                  : formatTime(draft.timestamp)}
+              </Text>
             </View>
           </View>
         </Pressable>
         <View style={styles.buttons}>
-          <IconButton iconName="timer-outline" onPress={onSchedule} />
-          <IconButton iconName="ios-remove-circle" onPress={onDelete} />
+          <IconButton
+            iconName="timer-outline"
+            onPress={() => {
+              setCalendarVisible(true);
+            }}
+          />
+          <GlobalDateTimePicker
+            visible={calendarVisible}
+            onCancel={() => setCalendarVisible(false)}
+            onSelect={(gregorianDate) => {
+              onSchedule({ ...draft, scheduled: gregorianDate.getTime() });
+              setCalendarVisible(false);
+            }}
+          />
+          <IconButton
+            iconName="ios-remove-circle"
+            onPress={() => {
+              onDelete(draft);
+            }}
+          />
         </View>
       </View>
       <View style={styles.separator} />

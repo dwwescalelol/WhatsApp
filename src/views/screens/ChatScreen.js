@@ -73,31 +73,33 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleSend = async () => {
+    setError('');
+    setSucsess('');
+
     if (!message.trim()) {
       setError('Message must have more than one charecter.');
       return;
     }
     if (Object.values(currentDraft || {}).length > 0) {
-      handleSendDraft();
-    } else handleSendMessage();
+      handleSendDraft(currentDraft);
+    } else handleSendMessage(message);
 
     setMessage('');
   };
 
-  const handleSendDraft = async () => {
+  const handleSendDraft = async (sendDraft) => {
     const allDrafts = await getAsyncDrafts();
     const newDrafts = allDrafts.filter(
-      (draft) => draft.draftId !== currentDraft.draftId
+      (draft) => draft.draftId !== sendDraft.draftId
     );
     await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
     setChatDrafts(newDrafts);
+    handleSendMessage(sendDraft);
+    setCurrentDraft({});
     setSucsess('Sent draft!');
   };
 
-  const handleSendMessage = async () => {
-    setError('');
-    setSucsess('');
-
+  const handleSendMessage = async (message) => {
     try {
       await ApiHandler.sendMessage(store.token, chat.chatId, message);
       setMessages((await updateChat()).messages);
@@ -107,6 +109,9 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleDraft = async () => {
+    setError('');
+    setSucsess('');
+
     if (!message.trim()) {
       setError('Cant save empty message as draft');
       return;
@@ -154,6 +159,41 @@ const ChatScreen = ({ route }) => {
     setCurrentDraft(draft);
   };
 
+  const handleDeleteDraft = async (deleteDraft) => {
+    const allDrafts = await getAsyncDrafts();
+
+    const newDrafts = allDrafts.filter(
+      (draft) => deleteDraft.draftId !== draft.draftId
+    );
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setChatDrafts(newDrafts);
+  };
+
+  const handleScheduleDraft = async (scheduledDraft) => {
+    const allDrafts = await getAsyncDrafts();
+
+    const newDrafts = allDrafts.map((draft) =>
+      draft.draftId === scheduledDraft.draftId ? scheduledDraft : draft
+    );
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setChatDrafts(newDrafts);
+  };
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const currentTime = Date.now();
+      const allDrafts = await getAsyncDrafts();
+
+      const scheduledDrafts = allDrafts.filter(
+        (draft) => draft.scheduled && draft.scheduled <= currentTime
+      );
+
+      scheduledDrafts.map((draft) => handleSendDraft(draft.message));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [drafts]);
+
   useEffect(() => {
     setFormattedMessages(formatChat());
   }, [messages]);
@@ -174,6 +214,8 @@ const ChatScreen = ({ route }) => {
         onClose={() => store.closeDrafts()}
         drafts={drafts}
         onElementPress={handleDraftPress}
+        onElementDelete={handleDeleteDraft}
+        onElemenetSchedule={handleScheduleDraft}
       />
       <FlatList
         data={formattedMessages}

@@ -8,9 +8,21 @@ const MAX_WIDTH = 500;
 const screenWidth = Dimensions.get('window').width;
 const drawerWidth = Math.min(MAX_WIDTH, screenWidth * 0.7);
 
-const Drafts = ({ visible, onClose, drafts, onElementPress }) => {
+const Drafts = ({
+  visible,
+  onClose,
+  drafts,
+  onElementPress,
+  onElementDelete,
+  onElemenetSchedule,
+}) => {
   const renderItem = ({ item }) => (
-    <DraftListItem draft={item} onPress={onElementPress} />
+    <DraftListItem
+      draft={item}
+      onPress={onElementPress}
+      onDelete={onElementDelete}
+      onSchedule={onElemenetSchedule}
+    />
   );
 
   return (
@@ -35,6 +47,8 @@ Drafts.propTypes = {
   onClose: PropTypes.func,
   drafts: PropTypes.array,
   onElementPress: PropTypes.func,
+  onElementDelete: PropTypes.func,
+  onElemenetSchedule: PropTypes.func,
 };
 
 export default Drafts;
