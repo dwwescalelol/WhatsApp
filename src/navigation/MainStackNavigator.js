@@ -2,17 +2,19 @@ import React from 'react';
 import { View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { useNavigation } from '@react-navigation/native';
+import { useStore } from '../stores/AppStore';
+import MainTabNavigator from './MainTabNavigator';
+
 import ChatScreen from '../views/screens/ChatScreen';
 import ProfileScreen from '../views/screens/ProfileScreen';
-import MainTabNavigator from './MainTabNavigator';
 import SearchContactScreen from '../views/screens/SearchContactScreen';
 import CreateChatScreen from '../views/screens/CreateChatScreen';
 import IconButton from '../views/components/IconButton';
 import ChatSettingsScreen from '../views/screens/ChatSettingsScreen';
-import { useNavigation } from '@react-navigation/native';
 import EditableProfile from '../views/components/EditableProfile';
-import { useStore } from '../stores/AppStore';
 import AddUsersScreen from '../views/screens/AddUsersScreen';
+import EditPasswordScreen from '../views/screens/EditPasswordScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -57,6 +59,7 @@ const MainStackNavigator = () => {
           };
         }}
       />
+      <Stack.Screen name="EditPassword" component={EditPasswordScreen} />
       <Stack.Screen name="AddUsers" component={AddUsersScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Search" component={SearchContactScreen} />

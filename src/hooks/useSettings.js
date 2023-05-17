@@ -15,7 +15,7 @@ export const useSettings = () => {
   };
 
   const handleChangePassword = async () => {
-    navigation.navigate();
+    navigation.navigate('EditPassword');
   };
 
   const handleLogout = async () => {
