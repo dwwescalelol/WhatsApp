@@ -12,6 +12,7 @@ import ChatSettingsScreen from '../views/screens/ChatSettingsScreen';
 import { useNavigation } from '@react-navigation/native';
 import EditableProfile from '../views/components/EditableProfile';
 import { useStore } from '../stores/AppStore';
+import AddUsersScreen from '../views/screens/AddUsersScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ const MainStackNavigator = () => {
           };
         }}
       />
+      <Stack.Screen name="AddUsers" component={AddUsersScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Search" component={SearchContactScreen} />
       <Stack.Screen name="CreateChat" component={CreateChatScreen} />

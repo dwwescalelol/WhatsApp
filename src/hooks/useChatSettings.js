@@ -1,10 +1,14 @@
+import React from 'react';
 import { useState } from 'react';
 import { useStore } from '../stores/AppStore';
 import ApiHandler from '../api/ApiHandler';
 import { useUpdateChat } from './useUpdateChat';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 export const useChatSettings = ({ chat }) => {
   const store = useStore();
+  const navigation = useNavigation();
+
   const handleUpdateChat = useUpdateChat();
 
   const numMembers = chat.members.length;
@@ -25,12 +29,16 @@ export const useChatSettings = ({ chat }) => {
     }
   };
 
+  const handleAddUsers = async () => {
+    console.log(chat);
+    navigation.navigate('AddUsers', { ...chat });
+  };
+
   const handleRemoveUsers = async () => {
     setError('');
 
     try {
       const updatedMembers = [...members];
-
       for (const user of selectedUsers) {
         await ApiHandler.removeUserFromChat(
           store.token,
@@ -55,11 +63,10 @@ export const useChatSettings = ({ chat }) => {
 
   const handleItemPress = (user) => {
     if (user.userId === store.userId) {
-      return; // Do not proceed with the rest of the function
+      return;
     }
 
     const users = selectedUsers.find((item) => item.userId === user.userId);
-
     if (users) {
       setSelectedUsers(
         selectedUsers.filter((item) => item.userId !== user.userId)
@@ -85,6 +92,29 @@ export const useChatSettings = ({ chat }) => {
     }
   };
 
+  const updateChatInfo = async () => {
+    setError('');
+
+    try {
+      const responce = await ApiHandler.getChatDetails(
+        store.token,
+        chat.chatId
+      );
+      console.log(responce);
+      setMembers(responce.members);
+    } catch (error) {
+      setError(error.message);
+      console.log(error.message);
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      updateChatInfo();
+      return () => {};
+    }, [])
+  );
+
   return {
     members,
     numMembers,
@@ -97,5 +127,6 @@ export const useChatSettings = ({ chat }) => {
     handleRemoveUsers,
     handleItemPress,
     handleLeaveChat,
+    handleAddUsers,
   };
 };

@@ -19,6 +19,7 @@ const ChatSettingsScreen = ({ route }) => {
     handleRemoveUsers,
     handleItemPress,
     handleLeaveChat,
+    handleAddUsers,
   } = useChatSettings(route.params);
 
   return (
@@ -39,7 +40,7 @@ const ChatSettingsScreen = ({ route }) => {
         </View>
       ) : null}
       <View style={styles.buttons}>
-        <Button label="Add Users" onPress={() => null} />
+        <Button label="Add Users" onPress={handleAddUsers} />
       </View>
       {isAdmin ? (
         <View style={styles.buttons}>

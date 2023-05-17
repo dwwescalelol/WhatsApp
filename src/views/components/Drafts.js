@@ -30,6 +30,7 @@ const Drafts = ({
       isVisible={visible}
       animationIn="slideInLeft"
       animationOut="slideOutLeft"
+      style={{ margin: 0 }}
     >
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View style={{ width: drawerWidth, backgroundColor: '#fff' }}>

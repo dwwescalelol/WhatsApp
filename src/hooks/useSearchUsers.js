@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ApiHandler from '../api/ApiHandler';
 import { useStore } from '../stores/AppStore';
 
-export const useSearchUsers = ({ searchIn = 'all' }) => {
+export const useSearchUsers = (searchIn) => {
   const store = useStore();
 
   const [offset, setOffset] = useState(0);
