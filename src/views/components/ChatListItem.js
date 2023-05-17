@@ -7,6 +7,7 @@ import Avatar from './Avatar';
 import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
 import formatTime from '../../utilities/FormatTime';
+import { t } from '../../locales';
 
 const ChatListItem = ({ chat, onPress = null }) => {
   const store = useStore();
@@ -59,7 +60,7 @@ const ChatListItem = ({ chat, onPress = null }) => {
               </View>
             </View>
             <Text style={styles.lastMessage} numberOfLines={2}>
-              {chat.last_message.message || 'New chat, say hello!'}
+              {chat.last_message.message || t('greeting')}
             </Text>
           </View>
           <View style={styles.separator} />

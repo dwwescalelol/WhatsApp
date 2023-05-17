@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import InputField from '../components/InputField';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
+import InputField from '../components/InputField';
 import ErrorMessage from '../components/ErrorMessage';
 import ContactList from '../components/ContactList';
 import Button from '../components/Button';

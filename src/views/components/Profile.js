@@ -1,10 +1,12 @@
 import React from 'react';
-import Avatar from './Avatar';
-import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
-import Button from './Button';
-import ErrorMessage from './ErrorMessage';
 import { useContactActions } from '../../hooks/useContactActions';
+import { t } from '../../locales';
+import PropTypes from 'prop-types';
+
+import Button from './Button';
+import Avatar from './Avatar';
+import ErrorMessage from './ErrorMessage';
 
 const Profile = ({ user }) => {
   const contactHook = useContactActions(user);
@@ -36,7 +38,7 @@ const Profile = ({ user }) => {
         <Button
           disable={contactHook.submitted}
           onPress={contactHook.handleUnblock}
-          label="Unblock"
+          label={t('unblock')}
           color="red"
           invert
         />
@@ -45,14 +47,14 @@ const Profile = ({ user }) => {
           <Button
             disable={contactHook.submitted}
             onPress={contactHook.handleRemoveContact}
-            label="Remove Contact"
+            label={t('removec')}
             invert
             color="red"
           />
           <Button
             disable={contactHook.submitted}
             onPress={contactHook.handleBlock}
-            label="Block"
+            label={t('block')}
             color="red"
           />
         </>
@@ -60,7 +62,7 @@ const Profile = ({ user }) => {
         <Button
           disable={contactHook.submitted}
           onPress={contactHook.handleAddContact}
-          label="Add Contact"
+          label={t('addc')}
           invert
         />
       )}

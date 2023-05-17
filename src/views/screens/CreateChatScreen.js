@@ -6,6 +6,7 @@ import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
 import { useCreateChat } from '../../hooks/useCreateChat';
+import { t } from '../../locales';
 
 const CreateChatScreen = () => {
   const {
@@ -40,12 +41,12 @@ const CreateChatScreen = () => {
         <InputField
           value={chatName}
           onChangeText={setChatName}
-          placeholder="Chat Name"
+          placeholder={t('chatn')}
         />
         <InputField
           value={searchText}
           onChangeText={setSearchText}
-          placeholder="Search"
+          placeholder={t('search')}
           style={{ marginBottom: 10 }}
         />
         <ErrorMessage message={searchError} />
@@ -60,7 +61,7 @@ const CreateChatScreen = () => {
       <View style={styles.buttons}>
         <ErrorMessage message={error} />
         <Button
-          label="Create Chat"
+          label={t('createc')}
           onPress={handleCreateChat}
           disable={submitted}
           style={{ marginBottom: 10 }}

@@ -30,7 +30,6 @@ export const useChatSettings = ({ chat }) => {
   };
 
   const handleAddUsers = async () => {
-    console.log(chat);
     navigation.navigate('AddUsers', { ...chat });
   };
 
@@ -100,7 +99,6 @@ export const useChatSettings = ({ chat }) => {
         store.token,
         chat.chatId
       );
-      console.log(responce);
       setMembers(responce.members);
     } catch (error) {
       setError(error.message);

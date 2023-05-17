@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, FlatList, View, Text } from 'react-native';
-import IconButton from '../components/IconButton';
-import Message from '../components/Message';
-import InputField from '../components/InputField';
-import ApiHandler from '../../api/ApiHandler';
+import { StyleSheet, FlatList, View } from 'react-native';
 import { useStore } from '../../stores/AppStore';
+import { v4 as uuidV4 } from 'uuid';
+import { t } from '../../locales';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ApiHandler from '../../api/ApiHandler';
 import ErrorMessage from '../components/ErrorMessage';
 import SucsessMessage from '../components/SucsessMessage';
 import Drafts from '../components/Drafts';
-import { v4 as uuidV4 } from 'uuid';
+import IconButton from '../components/IconButton';
+import Message from '../components/Message';
+import InputField from '../components/InputField';
 
 const ChatScreen = ({ route }) => {
   const { chat } = route.params;
@@ -78,7 +80,7 @@ const ChatScreen = ({ route }) => {
     setSucsess('');
 
     if (!message.trim()) {
-      setError('Message must have more than one charecter.');
+      setError(t('message>1'));
       return;
     }
     if (Object.values(currentDraft || {}).length > 0)
@@ -99,7 +101,7 @@ const ChatScreen = ({ route }) => {
     setChatDrafts(newDrafts);
     handleSendMessage(sendDraft);
     setCurrentDraft({});
-    setSucsess('Sent draft!');
+    setSucsess(t('sentdraft'));
   };
 
   const handleSendMessage = async () => {
@@ -116,7 +118,7 @@ const ChatScreen = ({ route }) => {
     setSucsess('');
 
     if (!message.trim()) {
-      setError('Cant save empty message as draft');
+      setError(t('emptydraft'));
       return;
     }
     if (Object.values(currentDraft || {}).length > 0) {
@@ -135,7 +137,7 @@ const ChatScreen = ({ route }) => {
     );
     await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
     setChatDrafts(newDrafts);
-    setSucsess('Draft edited');
+    setSucsess(t('draftedit'));
   };
 
   const handleSaveDraft = async () => {
@@ -153,7 +155,7 @@ const ChatScreen = ({ route }) => {
 
     await AsyncStorage.setItem('drafts', JSON.stringify(allDrafts));
     setChatDrafts(allDrafts);
-    setSucsess('Draft Saved!');
+    setSucsess(t('draftsave'));
   };
 
   const handleDraftPress = (draft) => {
@@ -214,7 +216,7 @@ const ChatScreen = ({ route }) => {
   const handleEditMessage = async (message) => {
     setCurrentDraft({});
     setCurrentEdited(message);
-    setSucsess('Editing message:');
+    setSucsess(t('editmsg'));
     setMessage(message.message);
   };
 
@@ -294,7 +296,7 @@ const ChatScreen = ({ route }) => {
         <InputField
           value={message}
           onChangeText={setMessage}
-          placeholder="Type Message..."
+          placeholder={t('typemsg')}
           style={styles.inputField}
         />
         <IconButton iconName="save-outline" onPress={handleDraft} />

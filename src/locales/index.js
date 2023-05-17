@@ -3,12 +3,16 @@ import * as Localization from 'expo-localization';
 
 import en from './en.json';
 import es from './es.json';
+import cy from './cy.json';
+import fr from './fr.json';
 import cn from './cn.json';
 
 I18n.translations = {
   en,
   es,
   cn,
+  fr,
+  cy,
 };
 
 export async function getLanguage() {

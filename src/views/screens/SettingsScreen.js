@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSettings } from '../../hooks/useSettings';
+import { useStore } from '../../stores/AppStore';
+import { t } from '../../locales';
+
 import Button from '../components/Button';
 import ErrorMessage from '../components/ErrorMessage';
-import { useSettings } from '../../hooks/useSettings';
-
 import Avatar from '../components/Avatar';
-import { useStore } from '../../stores/AppStore';
 
 const SettingScreen = () => {
   const { error, handleEditProfile, handleChangePassword, handleLogout } =
@@ -36,9 +37,13 @@ const SettingScreen = () => {
       <View style={styles.separator} />
 
       <ErrorMessage message={error} />
-      <Button label="Edit Profile" invert onPress={handleEditProfile} />
-      <Button label="Change Password" invert onPress={handleChangePassword} />
-      <Button label="Logout" onPress={handleLogout} color="red" />
+      <Button label={t('edit profile')} invert onPress={handleEditProfile} />
+      <Button
+        label={t('change password')}
+        invert
+        onPress={handleChangePassword}
+      />
+      <Button label={t('logout')} onPress={handleLogout} color="red" />
     </View>
   );
 };

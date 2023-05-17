@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import Validate from '../../utilities/ValidateFields';
-import InputField from '../components/InputField';
 import { StyleSheet, View } from 'react-native';
-import ErrorMessage from '../components/ErrorMessage';
-import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/core';
-import ApiHandler from '../../api/ApiHandler';
 import { useStore } from '../../stores/AppStore';
+import { t } from '../../locales';
+
+import ApiHandler from '../../api/ApiHandler';
+import Validate from '../../utilities/ValidateFields';
+import ErrorMessage from '../components/ErrorMessage';
+import InputField from '../components/InputField';
+import Button from '../components/Button';
 
 const EditPasswordScreen = () => {
   const navigation = useNavigation();
@@ -42,7 +44,7 @@ const EditPasswordScreen = () => {
         isPassword={true}
         onChangeText={setPassword}
         errorMessage={Validate.password(password)}
-        placeholder="Password"
+        placeholder={t('password')}
       />
 
       <InputField
@@ -50,13 +52,13 @@ const EditPasswordScreen = () => {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         errorMessage={Validate.confirmPassword(password, confirmPassword)}
-        placeholder="Current Password"
+        placeholder={t('current password')}
       />
 
       <ErrorMessage message={error} />
 
       <Button
-        label="Change Password"
+        label={t('change password')}
         onPress={async () => {
           await handleEditPassword();
           navigation.navigate('Settings');

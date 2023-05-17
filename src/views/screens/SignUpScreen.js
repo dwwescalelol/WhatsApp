@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useSignUp } from '../../hooks/useSignUp';
+import { t } from '../../locales';
+
 import InputField from '../components/InputField';
 import ErrorMessage from '../components/ErrorMessage';
-import Validate from '../../utilities/ValidateFields';
 import Button from '../components/Button';
-import { useSignUp } from '../../hooks/useSignUp';
-
-// TODO: handel aria-label for text inputs, cahnge handelSignUp to do onblur of all fields, maybe change button red
+import Validate from '../../utilities/ValidateFields';
 
 const SignUpScreen = () => {
   const {
@@ -37,7 +37,7 @@ const SignUpScreen = () => {
         value={firstName}
         onChangeText={setFirstName}
         errorMessage={Validate.name(firstName)}
-        placeholder="First Name"
+        placeholder={t('firstn')}
       />
 
       {/* Last name*/}
@@ -45,7 +45,7 @@ const SignUpScreen = () => {
         value={lastName}
         onChangeText={setLastName}
         errorMessage={Validate.name(lastName)}
-        placeholder="Last Name"
+        placeholder={t('lastn')}
       />
 
       {/* Email */}
@@ -53,7 +53,7 @@ const SignUpScreen = () => {
         value={email}
         onChangeText={setEmail}
         errorMessage={Validate.email(email)}
-        placeholder="Email Adress"
+        placeholder={t('email')}
       />
 
       {/* Password */}
@@ -62,7 +62,7 @@ const SignUpScreen = () => {
         isPassword={true}
         onChangeText={setPassword}
         errorMessage={Validate.password(password)}
-        placeholder="Password"
+        placeholder={t('password')}
       />
 
       {/* Confirm Password */}
@@ -71,16 +71,16 @@ const SignUpScreen = () => {
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         errorMessage={Validate.confirmPassword(password, confirmPassword)}
-        placeholder="Current Password"
+        placeholder={t('confirm password')}
       />
 
       <ErrorMessage message={error} />
       {/* Signup Button */}
-      <Button label="SIGN UP" onPress={handleSignUp} disabled={submitted} />
+      <Button label={t('signup')} onPress={handleSignUp} disabled={submitted} />
 
       {/* LogIn Button */}
       <Button
-        label="LOG IN"
+        label={t('login')}
         onPress={navigateLogIn}
         invert
         disabled={submitted}

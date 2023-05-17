@@ -5,6 +5,7 @@ import { useLogin } from '../../hooks/useLogin';
 import InputField from '../components/InputField';
 import ErrorMessage from '../components/ErrorMessage';
 import Button from '../components/Button';
+import { t } from '../../locales';
 
 const LoginScreen = () => {
   const {
@@ -27,7 +28,7 @@ const LoginScreen = () => {
       <InputField
         value={email}
         onChangeText={setEmail}
-        placeholder="Email Address"
+        placeholder={t('email')}
       />
 
       {/* Password */}
@@ -35,16 +36,16 @@ const LoginScreen = () => {
         isPassword={true}
         value={password}
         onChangeText={setPassword}
-        placeholder="Password"
+        placeholder={t('password')}
       />
 
       {/* Login Button */}
       <ErrorMessage message={error} />
-      <Button label="LOG IN" onPress={handleLogin} disable={submitted} />
+      <Button label={t('login')} onPress={handleLogin} disable={submitted} />
 
       {/* Signup Button */}
       <Button
-        label="SIGN UP"
+        label={t('signup')}
         onPress={navigateSignUp}
         disable={submitted}
         invert

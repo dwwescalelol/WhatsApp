@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import ContactList from '../components/ContactList';
+
 import { useContacts } from '../../hooks/useContacts';
-import PropTypes from 'prop-types';
 import { useStore } from '../../stores/AppStore';
-import ApiHandler from '../../api/ApiHandler';
-import Button from '../components/Button';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
+import { t } from '../../locales';
+
+import PropTypes from 'prop-types';
+import ApiHandler from '../../api/ApiHandler';
+
+import ContactList from '../components/ContactList';
+import Button from '../components/Button';
 import InputField from '../components/InputField';
 import ErrorMessage from '../components/ErrorMessage';
 
@@ -51,7 +55,6 @@ const AddUsersScreen = ({ route }) => {
         store.token,
         chat.chatId
       );
-      console.log(responce);
       setMembers(responce.members);
     } catch (error) {
       setError(error.message);
@@ -96,7 +99,7 @@ const AddUsersScreen = ({ route }) => {
         <InputField
           value={searchText}
           onChangeText={setSearchText}
-          placeholder="Search"
+          placeholder={t('search')}
         />
         <ErrorMessage message={error} />
       </View>
@@ -107,7 +110,7 @@ const AddUsersScreen = ({ route }) => {
         onItemPress={handleItemPress}
       />
       <Button
-        label="Add Users"
+        label={t('add users')}
         onPress={handleAddUsers}
         invert
         style={{ alignSelf: 'center', marginBottom: 10 }}

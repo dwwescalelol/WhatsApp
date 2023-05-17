@@ -1,14 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { useEditProfile } from '../../hooks/useEditProfile';
-import ErrorMessage from '../components/ErrorMessage';
-import SucsessMessage from '../components/SucsessMessage';
+import { useStore } from '../../stores/AppStore';
+import PropTypes from 'prop-types';
+import { t } from '../../locales';
+
 import Avatar from './Avatar';
 import InputField from './InputField';
+import SucsessMessage from '../components/SucsessMessage';
+import ErrorMessage from '../components/ErrorMessage';
 import Button from '../components/Button';
 import Validate from '../../utilities/ValidateFields';
-import { useStore } from '../../stores/AppStore';
 
 const EditableProfile = () => {
   const store = useStore();
@@ -48,19 +50,19 @@ const EditableProfile = () => {
           value={firstName}
           onChangeText={setFirstName}
           onFocus={() => {}}
-          placeholder="First Name"
+          placeholder={t('firstn')}
           errorMessage={Validate.name(firstName)}
           isEdited={firstName !== store.firstName}
-          editMessage="First name has been edited"
+          editMessage={t('firstnedit')}
         />
         <InputField
           value={lastName}
           onChangeText={setLastName}
           onFocus={() => {}}
-          placeholder="Last Name"
+          placeholder={t('lastn')}
           errorMessage={Validate.name(lastName)}
           isEdited={lastName !== store.lastName}
-          editMessage="Last name has been edited"
+          editMessage={t('lastnedit')}
         />
       </View>
 
@@ -73,10 +75,10 @@ const EditableProfile = () => {
           value={email}
           onChangeText={setEmail}
           onFocus={() => {}}
-          placeholder="Email"
+          placeholder={t('email')}
           errorMessage={Validate.email(email)}
           isEdited={email !== store.email}
-          editMessage="Email has been edited"
+          editMessage={t('emailedit')}
         />
       </View>
 
@@ -85,7 +87,7 @@ const EditableProfile = () => {
       <ErrorMessage message={error} />
 
       <Button
-        label="Confirm Changes"
+        label={t('conchange')}
         onPress={handleConfirmChanges}
         disabled={submitted}
         invert

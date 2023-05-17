@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { useStore } from '../stores/AppStore';
 import ApiHandler from '../api/ApiHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useStore } from '../stores/AppStore';
 import Validate from '../utilities/ValidateFields';
 
 export const useLogin = () => {
