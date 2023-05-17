@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import InputField from '../components/InputField';
 import { useSearchUsers } from '../../hooks/useSearchUsers';
 import ErrorMessage from '../components/ErrorMessage';
 import ContactList from '../components/ContactList';
+import Button from '../components/Button';
 
 const SearchContactScreen = () => {
-  const { searchText, searchResults, error, setSearchText } =
-    useSearchUsers('all');
+  const {
+    searchText,
+    searchResults,
+    error,
+    setSearchText,
+    handleDisplayMoreUsers,
+    isMoreUsers,
+  } = useSearchUsers('all');
 
   return (
     <View style={styles.container}>
@@ -22,6 +29,13 @@ const SearchContactScreen = () => {
       <View>
         <ContactList data={searchResults} />
       </View>
+      {isMoreUsers ? (
+        <Button
+          label="Load More Users"
+          style={{ alignSelf: 'center' }}
+          onPress={handleDisplayMoreUsers}
+        />
+      ) : null}
     </View>
   );
 };
@@ -35,8 +49,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     backgroundColor: 'white',
     alignItems: 'center',
-    borderBottomWidth: 1,
     borderColor: '#c7c7c7',
+    marginBottom: 10,
   },
   list: {
     backgroundColor: 'white',
