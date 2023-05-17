@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import Switch from '../components/Switch';
 import ContactList from '../components/ContactList';
 import { useContacts } from '../../hooks/useContacts';
+import { t } from '../../locales';
 
 const ContactsScreen = () => {
   const {
@@ -25,7 +26,7 @@ const ContactsScreen = () => {
       >
         <View style={styles.switch}>
           <Switch
-            label="Contacts"
+            label={t('contacts')}
             value={showContacts}
             onValueChange={() => {
               setShowContacts(true);

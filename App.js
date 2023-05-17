@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import MainStackNavigator from './src/navigation/MainStackNavigator';
 import 'react-native-gesture-handler';
 import { useInitialiseStore } from './src/hooks/useInitialiseStore';
+import { getLanguage } from './src/locales';
 
 export default function App() {
   const store = useStore();
@@ -16,6 +17,10 @@ export default function App() {
   useEffect(() => {
     handleInitialStore();
   }, [store.token]);
+
+  useEffect(() => {
+    getLanguage();
+  }, []);
 
   return (
     <View style={styles.container}>
