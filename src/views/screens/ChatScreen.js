@@ -89,6 +89,8 @@ const ChatScreen = ({ route }) => {
       sendEdittedMessage(currentEdited);
     else handleSendMessage();
 
+    setCurrentDraft({});
+    setCurrentEdited({});
     setMessage('');
   };
 
@@ -114,6 +116,7 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleDraft = async () => {
+    if (Object.values(currentEdited || {}).length > 0) return;
     setError('');
     setSucsess('');
 
@@ -126,6 +129,7 @@ const ChatScreen = ({ route }) => {
     } else handleSaveDraft();
 
     setCurrentDraft({});
+    setCurrentEdited({});
     setMessage('');
   };
 
