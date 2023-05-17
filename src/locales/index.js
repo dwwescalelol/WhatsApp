@@ -19,8 +19,8 @@ export async function getLanguage() {
   try {
     const choice = Localization.locale;
     await I18n.initAsync();
-    I18n.locale = choice.substring(0, 2);
-    // I18n.locale = 'cn';
+    I18n.locale = 'cy';
+    // I18n.locale = choice.substring(0, 2);
   } catch (err) {
     console.log(err);
   }

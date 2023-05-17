@@ -18,11 +18,13 @@ export const useChats = () => {
       store.setChats(response);
     } catch (error) {
       setError(error);
+      console.log('caught hanging again');
     }
   };
 
   useFocusEffect(
     React.useCallback(() => {
+      if (!store.token) return;
       getChats();
       return () => {};
     }, [])

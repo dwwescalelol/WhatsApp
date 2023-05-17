@@ -187,7 +187,6 @@ const ChatScreen = ({ route }) => {
   };
 
   const handleDeleteMessage = async (message) => {
-    console.log(message);
     try {
       await ApiHandler.deleteMessage(
         store.token,
@@ -200,7 +199,6 @@ const ChatScreen = ({ route }) => {
   };
 
   const sendEdittedMessage = async () => {
-    console.log(currentEdited);
     try {
       await ApiHandler.updateMessage(
         store.token,

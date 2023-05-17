@@ -18,13 +18,13 @@ export const useLogin = () => {
     setError('');
     setSubmitted(true);
 
-    const isValidEmail = Validate.email(email);
-    if (isValidEmail) {
-      setError(isValidEmail);
-      return;
-    }
-
     try {
+      const isValidEmail = Validate.email(email);
+      if (isValidEmail) {
+        setError(isValidEmail);
+        return;
+      }
+
       const session = await ApiHandler.login(email, password);
       await AsyncStorage.multiSet([
         ['userId', session.id],

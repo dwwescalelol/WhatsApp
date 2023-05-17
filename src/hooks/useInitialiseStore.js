@@ -29,7 +29,11 @@ export const useInitialiseStore = () => {
       await store.setBlocked(blocked);
 
       // if no chats this will hang indefinatly cause api.
-      ApiHandler.getChats(store.token).then((chats) => store.setChats(chats));
+      try {
+        ApiHandler.getChats(store.token).then((chats) => store.setChats(chats));
+      } catch (error) {
+        console.log('caught hangign');
+      }
     }
   };
 
